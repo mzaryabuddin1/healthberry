@@ -28,7 +28,7 @@
 					<div class="row">
 						<div class="col-sm-10 position-relative mx-auto">
 							<div class="auth-content py-8">
-								<form class="w-100">
+								<form class="w-100" id="regstr">
 									<div class="row">
 										<div class="col-lg-5 col-md-7 col-sm-10 mx-auto">
 											<div class="text-center mb-7">
@@ -42,14 +42,14 @@
 													<div class="row gx-3">
 														<div class="form-group col-lg-12">
 															<div class="form-label-group">
-																<label>User Name</label>
+																<label>Email</label>
 															</div>
-															<input class="form-control" placeholder="Enter username or email ID" value="" type="text">
+															<input class="form-control" placeholder="Enter email" value="" type="email" required>
 														</div>
 														<div class="form-group col-lg-12">
 															<div class="form-label-group">
 																<label>Password</label>
-																<a href="#" class="fs-7 fw-medium">Forgot Password ?</a>
+																<a href="<?= base_url() ?>forgot-password" class="fs-7 fw-medium">Forgot Password ?</a>
 															</div>
 															<div class="input-group password-check">
 																<span class="input-affix-wrapper">
@@ -68,7 +68,7 @@
 															<label class="form-check-label text-muted fs-7" for="logged_in">Keep me logged in</label>
 														</div> -->
 													</div>
-													<a href="#" class="btn btn-primary btn-uppercase btn-block">Login</a>
+													<button type="submit" class="btn btn-primary btn-uppercase btn-block">Login</button>
 													<!-- <p class="p-xs mt-2 text-center">New to Jampack? <a href="#"><u>Create new account</u></a></p> -->
 												</div>
 											</div>
@@ -118,5 +118,54 @@
 	
 	<!-- Init JS -->
 	<script src="<?= base_url() ?>theme/dist/js/init.js"></script>
+
+
+	<script>
+		$.ajax({
+                url: "<?php echo base_url() . "customer-update-settings"; ?>",
+                type: "post",
+                data: formdata,
+                processData: false, // tell jQuery not to process the data
+                contentType: false, // tell jQuery not to set contentType
+                cache: false,
+                beforeSend: function() {
+                    $(":submit").prop("disabled", true);
+                    $(":submit").addClass("d-none");
+                    $("#spinner").removeClass("d-none");
+                    $("#error").addClass("d-none");
+                },
+                success: function(res) {
+                    let obj = JSON.parse(res);
+                    if (obj.error) {
+                        $("#error").html(obj.error);
+                        $("#error").removeClass("d-none");
+                        $("#spinner").addClass("d-none");
+                        $(":submit").removeClass("d-none");
+                        toastr.error("Please check errors list!", "Error");
+                        $(window).scrollTop(0);
+                    } else if (obj.success) {
+                        $("#spinner").addClass("d-none");
+                        toastr.success("Success!", "Hurray");
+                        setTimeout(function() {
+                            window.location = '<?php echo base_url() . 'customer-settings' ?>';
+                        }, 1000);
+                    } else {
+                        $("#spinner").addClass("d-none");
+                        $(":submit").prop("disabled", false);
+                        $(":submit").removeClass("d-none");
+                        toastr.error("Something bad happened!", "Error");
+                        $(window).scrollTop(0);
+                    }
+                    $(":submit").prop("disabled", false);
+                },
+                error: function(error) {
+                    toastr.error("Error while sending request to server!", "Error");
+                    $(window).scrollTop(0);
+                    $("#spinner").addClass("d-none");
+                    $(":submit").prop("disabled", false);
+                    $(":submit").removeClass("d-none");
+                }
+            })
+	</script>
 </body>
 </html>
