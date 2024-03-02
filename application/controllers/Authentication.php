@@ -12,7 +12,7 @@ class Authentication extends CI_Controller {
         parent::__construct();
 
         // Emailer
-        $this->load->library('emailsender');
+        $this->load->library('emailSender');
         $this->load->model('Authentication_model', "Model");
         
     }
