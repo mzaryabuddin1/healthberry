@@ -75,7 +75,7 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
+	'hostname' => '68.178.145.9',
 	'username' => 'healthberry',
 	'password' => 'LRKBLO!VslN{',
 	'database' => 'healthberry',
