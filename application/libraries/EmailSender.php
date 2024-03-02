@@ -14,18 +14,18 @@ class EmailSender {
         
         // Set up the SMTP configuration
         $this->mail->isSMTP();
-        $this->mail->Host = 'smtp.example.com'; // Your SMTP host
+        $this->mail->Host = 'liveasoft.com'; // Your SMTP host
         $this->mail->SMTPAuth = true;
-        $this->mail->Username = 'your_username'; // Your SMTP username
-        $this->mail->Password = 'your_password'; // Your SMTP password
-        $this->mail->SMTPSecure = 'tls'; // Enable TLS encryption
-        $this->mail->Port = 587; // TCP port to connect to
+        $this->mail->Username = 'healthberry@liveasoft.com'; // Your SMTP username
+        $this->mail->Password = '%[2fkGV;od97'; // Your SMTP password
+        $this->mail->SMTPSecure = 'ssl'; // Enable TLS encryption
+        $this->mail->Port = 465; // TCP port to connect to
     }
 
     public function sendEmail($recipient, $subject, $body) {
         try {
             // Set up the email content
-            $this->mail->setFrom('from@example.com', 'Your Name');
+            $this->mail->setFrom('healthberry@liveasoft.com', 'Support');
             $this->mail->addAddress($recipient);
             $this->mail->Subject = $subject;
             $this->mail->Body = $body;
@@ -34,13 +34,14 @@ class EmailSender {
             $this->mail->send();
             return 1;
         } catch (Exception $e) {
+            echo 'Email could not be sent. Mailer Error: ' . $this->mail->ErrorInfo;
             return 0;
         }
     }
 
 }
 
-$emailSender = new EmailSender();
+$emailsender = new EmailSender();
 
 
 ?>
