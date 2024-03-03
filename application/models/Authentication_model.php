@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  *
@@ -16,7 +16,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  *
  */
 
-class Authentication_model extends CI_Model {
+class Authentication_model extends CI_Model
+{
 
   // ------------------------------------------------------------------------
 
@@ -34,9 +35,9 @@ class Authentication_model extends CI_Model {
     // 
   }
 
-  public function data()
+  public function login_submit($params)
   {
-    return [];
+    return $this->db->select("*")->from('users')->where('email', $params['email'])->where('password', $params['password'])->get()->row_array();
   }
 
 
