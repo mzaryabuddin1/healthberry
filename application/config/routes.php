@@ -18,3 +18,6 @@ $route['dashboard'] = "Dashboard";
 
 // DOCTOR
 $route['manage-doctor'] = "Doctor";
+
+// USERS
+$route['manage-users'] = "Users";
