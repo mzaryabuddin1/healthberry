@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$route['default_controller'] = 'welcome';
+$route['default_controller'] = 'Appuser';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
@@ -21,3 +21,9 @@ $route['manage-doctor'] = "Doctor";
 
 // USERS
 $route['manage-users'] = "Users";
+
+// APP USER
+$route['login-app-user'] = "Appuser";
+$route['app-login-submit'] = "Appuser/login_submit";
+$route['app-logout'] = "Appuser/logout";
+$route['app-dashboard'] = "Appuser/dashboard";
