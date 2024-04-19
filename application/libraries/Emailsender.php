@@ -5,7 +5,7 @@ require 'vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-class emailsender {
+class Emailsender {
     private $mail;
 
     public function __construct() {
@@ -41,7 +41,7 @@ class emailsender {
 
 }
 
-$emailsender = new emailsender();
+$emailsender = new Emailsender();
 
 
 ?>
