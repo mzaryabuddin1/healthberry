@@ -1,14 +1,17 @@
 <?php require_once("common2/header.php") ?>
-
 <!-- MAIN -->
 <div class="container">
+    <div class="text-end">
+        <div id="clock"></div>
+    </div>
+
     <section class="section">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
-                            <h5 class="card-title">Hi, <?= ucfirst($_SESSION['app_user_username'])  ?></h5>
-                            <a class="btn btn-danger" href="<?= base_url() ?>app-logout">Logout</a>
+                        <h5 class="card-title">Hi, <?= ucfirst($_SESSION['app_user_username'])  ?></h5>
+                        <a class="btn btn-danger" href="<?= base_url() ?>app-logout">Logout</a>
                     </div>
                     <div class="card-body">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -24,17 +27,63 @@
                         </ul>
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                <p class='my-2'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                    Nulla ut nulla
-                                    neque. Ut hendrerit nulla a euismod pretium.
-                                    Fusce venenatis sagittis ex efficitur suscipit. In tempor mattis
-                                    fringilla. Sed id
-                                    tincidunt orci, et volutpat ligula.
-                                    Aliquam sollicitudin sagittis ex, a rhoncus nisl feugiat quis. Lorem
-                                    ipsum dolor sit
-                                    amet, consectetur adipiscing elit.
-                                    Nunc ultricies ligula a tempor vulputate. Suspendisse pretium mollis
-                                    ultrices.</p>
+                                <div class="table-responsive mt-3">
+                                    <table class="table table-bordered table-hover">
+                                        <thead class="bg-secondary text-light text-center">
+                                            <th>DOCTOR</th>
+                                            <th>CITY</th>
+                                            <th>AREA</th>
+                                            <th>CHEMIST</th>
+                                            <th>SPECI.</th>
+                                            <th>DAY</th>
+                                            <th>TIMINGS</th>
+                                            <th>CALL</th>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($plan as $row) : ?>
+                                                <tr>
+                                                    <td><?= ucfirst($row['doctor_name']) ?></td>
+                                                    <td><?= ucfirst($row['city']) ?></td>
+                                                    <td><?= ucfirst($row['area']) ?></td>
+                                                    <td>
+                                                        <?php
+                                                        $parsed_chemist = json_decode($row['chemists']);
+                                                        foreach ($parsed_chemist as $var) {
+                                                            echo ucwords($var) . "<br>";
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php
+                                                        $parsed_specs = json_decode($row['specialities']);
+                                                        foreach ($parsed_specs as $var) {
+                                                            echo ucwords($var) . "<br>";
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td><?= ucfirst($row['planned_day']) ?></td>
+                                                    <td>
+                                                        <?php
+                                                        $parsed_timings = json_decode($row['timings'], true);
+                                                        foreach ($parsed_timings as $var) {
+                                                            echo $var["from"] . " - " . $var["to"] . "<br>";
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-group actBtns" role="group" aria-label="Basic example">
+                                                            <button type="button" class="btn btn-outline-primary btn-md callbtn" data-doctor="<?= ucfirst($row['doctor_name']) ?>"><i class="bi bi-telephone-fill"></i></button>
+                                                            <a class="btn btn-outline-danger btn-md" href="<?= base_url() . 'app-view-doctor-location?id=' . $row['id']?>"><i class="bi bi-geo-alt"></i></a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
                             </div>
                             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 Integer interdum diam eleifend metus lacinia, quis gravida eros mollis.
@@ -136,6 +185,57 @@
                 }
             })
         })
+    })
+</script>
+
+<script>
+    function updateClock() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+        var seconds = now.getSeconds();
+        var day = now.toLocaleString('en-US', {
+            weekday: 'long'
+        });
+        var date = now.toLocaleDateString('en-US');
+
+        hours = (hours < 10 ? "0" : "") + hours;
+        minutes = (minutes < 10 ? "0" : "") + minutes;
+        seconds = (seconds < 10 ? "0" : "") + seconds;
+
+        var timeString = hours + ":" + minutes + ":" + seconds;
+        var dateTimeString = day + ", " + date + " " + timeString;
+
+        document.getElementById("clock").innerText = dateTimeString;
+    }
+
+
+    // Update the clock every second
+    setInterval(updateClock, 1000);
+
+    // Initial call to display the clock immediately
+    updateClock();
+</script>
+
+<script>
+    $(".callbtn").on("click", () => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Call!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success"
+                });
+            }
+        });
     })
 </script>
 
