@@ -78,7 +78,17 @@ class Appuser extends CI_Controller
   public function dashboard()
   {
     $this->checksession();
-    $this->load->view("app_dashboard_view");
+    $this->data['plan'] = $this->Appuser_model->get_plan($_SESSION['app_user_id']);
+    $this->load->view("app_dashboard_view", $this->data);
+  }
+
+  public function doctor_location()
+  {
+    $this->checksession();
+    $params['app_user_id'] = $_SESSION['app_user_id'];
+    $params['plan_id'] = $_GET['id'];
+    $this->data['plan'] = $this->Appuser_model->get_doctor_location_by_plan_id($params);
+    $this->load->view("app_view_doctor_location", $this->data);
   }
 
 

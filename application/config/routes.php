@@ -27,3 +27,4 @@ $route['login-app-user'] = "Appuser";
 $route['app-login-submit'] = "Appuser/login_submit";
 $route['app-logout'] = "Appuser/logout";
 $route['app-dashboard'] = "Appuser/dashboard";
+$route['app-view-doctor-location'] = "Appuser/doctor_location";
