@@ -83,6 +83,7 @@ class Appuser extends CI_Controller
     $this->data['plan'] = $this->Appuser_model->get_plan($_SESSION['app_user_id']);
     $this->data['cities'] = $this->Appuser_model->get_cities();
     $this->data['products'] = $this->Appuser_model->get_active_products();
+    $this->data['locations'] = $this->Appuser_model->get_appuser_locations($_SESSION['app_user_id']);
     // $this->data['history'] = $this->Appuser_model->get_history($_SESSION['app_user_id']);
     $this->load->view("app_dashboard_view", $this->data);
   }
@@ -154,6 +155,17 @@ class Appuser extends CI_Controller
       exit;
     }
 
+    if(!$location_lat_lng['is_approved']){
+      $errors = array('error' => 'Location is not approved yet!');
+      print_r(json_encode($errors));
+      exit;
+    }
+    if(!$location_lat_lng['status']){
+      $errors = array('error' => 'Location is currently unavailable');
+      print_r(json_encode($errors));
+      exit;
+    }
+
 
 
     $is_within_radius = $this->check_current_location(
@@ -215,6 +227,7 @@ class Appuser extends CI_Controller
     $this->form_validation->set_rules('latitude', 'Latitude', 'required|numeric|greater_than_equal_to[-90]|less_than_equal_to[90]');
     $this->form_validation->set_rules('longitude', 'Longitude', 'required|numeric|greater_than_equal_to[-180]|less_than_equal_to[180]');
     $this->form_validation->set_rules('city', 'City', 'required|numeric');
+    $this->form_validation->set_rules('area', 'Area', 'required|trim');
     $this->form_validation->set_rules('chemists[]', 'Chemists', 'required|trim');
     $this->form_validation->set_rules('specialities[]', 'Specialities', 'required|trim');
     $this->form_validation->set_rules('days[]', 'Days', 'required|trim');
@@ -235,6 +248,7 @@ class Appuser extends CI_Controller
     $this->data['latitude'] = $information['latitude'];
     $this->data['longitude'] = $information['longitude'];
     $this->data['city'] = $information['city'];
+    $this->data['area'] = $information['area'];
     $this->data['chemists'] = json_encode($information['chemists']);
     $this->data['specialities'] = json_encode($information['specialities']);
 

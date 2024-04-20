@@ -120,7 +120,7 @@
                                                                             <label for="email-id-icon">Products</label>
                                                                             <div class="position-relative">
                                                                                 <select class="choices form-select multiple-remove" name="products[]" multiple="multiple" required>
-                                                                                    <?php foreach($products as $row) : ?>
+                                                                                    <?php foreach ($products as $row) : ?>
                                                                                         <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
 
                                                                                     <?php endforeach; ?>
@@ -147,7 +147,7 @@
                                                                             <label for="password-id-icon">City</label>
                                                                             <div class="position-relative">
                                                                                 <select class="choices form-select" name="city" required>
-                                                                                    <?php foreach($cities as $row) : ?>
+                                                                                    <?php foreach ($cities as $row) : ?>
                                                                                         <option value="<?= $row['id'] ?>"><?= $row['city_name'] ?></option>
 
                                                                                     <?php endforeach; ?>
@@ -294,6 +294,55 @@
                                                             </div>
                                                         </form>
                                                     </div>
+
+                                                    <div class="table-responsive mt-3">
+                                                        <table class="table table-bordered table-hover">
+                                                            <thead class="bg-secondary text-light text-center">
+                                                                <th>DOCTOR</th>
+                                                                <th>APPROVAL</th>
+                                                                <th>CITY</th>
+                                                                <th>AREA</th>
+                                                                <th>CHEMIST</th>
+                                                                <th>SPECI.</th>
+                                                                <th>TIMINGS</th>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php foreach ($locations as $row) : ?>
+                                                                    <tr>
+                                                                        <td><?= ucfirst($row['doctor_name']) ?></td>
+                                                                        <td><?= $row['is_approved'] ? "APPROVED" : "NOT APPROVED" ?></td>
+                                                                        <td><?= ucfirst($row['city_name']) ?></td>
+                                                                        <td><?= ucfirst($row['area']) ?></td>
+                                                                        <td>
+                                                                            <?php
+                                                                            $parsed_chemist = json_decode($row['chemists']);
+                                                                            foreach ($parsed_chemist as $var) {
+                                                                                echo ucwords($var) . "<br>";
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?php
+                                                                            $parsed_specs = json_decode($row['specialities']);
+                                                                            foreach ($parsed_specs as $var) {
+                                                                                echo ucwords($var) . "<br>";
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?php
+                                                                            $parsed_timings = json_decode($row['timings'], true);
+                                                                            foreach ($parsed_timings as $var) {
+                                                                                echo $var["dayname"] . " - " . $var["from"] . " - " . $var["to"] . "<br>";
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                     
+                                                                    </tr>
+                                                                <?php endforeach; ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </form>
@@ -363,7 +412,7 @@
             e.preventDefault();
             // var formdata = new FormData(this);
             var formdata = $(this).serialize();
-            
+
             $.ajax({
                 url: "<?php echo base_url() . "app-new-location-submit"; ?>",
                 type: "post",

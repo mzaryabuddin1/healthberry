@@ -143,6 +143,19 @@ class Appuser_model extends CI_Model {
       ->row_array());
   }
 
+  public function get_appuser_locations($params)
+  {
+      return ($this->db->select('locations.*,
+      cities.city_name')
+      ->from('locations')
+      ->where('locations.created_by', $params)
+      ->where('locations.created_user', "appuser")
+      ->where('locations.status', 1)
+      ->join('cities', 'cities.id = locations.city', 'left')
+      ->get()
+      ->result_array());
+  }
+
   public function save_call($params)
   {
       return ($this->db->insert('location_calls', $params));
