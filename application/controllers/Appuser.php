@@ -205,4 +205,63 @@ class Appuser extends CI_Controller
       exit;
     }
   }
+
+  public function new_location_submit()
+  {
+    $this->checksession();
+
+    $this->form_validation->set_rules('doctor_name', 'Doctor Name', 'required|trim');
+    $this->form_validation->set_rules('products[]', 'Products', 'required|trim');
+    $this->form_validation->set_rules('latitude', 'Latitude', 'required|numeric|greater_than_equal_to[-90]|less_than_equal_to[90]');
+    $this->form_validation->set_rules('longitude', 'Longitude', 'required|numeric|greater_than_equal_to[-180]|less_than_equal_to[180]');
+    $this->form_validation->set_rules('city', 'City', 'required|numeric');
+    $this->form_validation->set_rules('chemists[]', 'Chemists', 'required|trim');
+    $this->form_validation->set_rules('specialities[]', 'Specialities', 'required|trim');
+    $this->form_validation->set_rules('days[]', 'Days', 'required|trim');
+    $this->form_validation->set_rules('timings_from[]', 'Timing From', 'required|trim');
+    $this->form_validation->set_rules('timings_to[]', 'Timing To', 'required|trim');
+
+    if ($this->form_validation->run() == false) {
+      $errors = array('error' => validation_errors());
+      print_r(json_encode($errors));
+      exit;
+    }
+
+    $information = $this->security->xss_clean($this->input->post());
+    $this->data['created_user'] = "appuser";
+    $this->data['created_by'] = $_SESSION['app_user_id'];
+    $this->data['doctor_name'] = $information['doctor_name'];
+    $this->data['products'] = json_encode($information['products']);
+    $this->data['latitude'] = $information['latitude'];
+    $this->data['longitude'] = $information['longitude'];
+    $this->data['city'] = $information['city'];
+    $this->data['chemists'] = json_encode($information['chemists']);
+    $this->data['specialities'] = json_encode($information['specialities']);
+
+    $timings_arr = [];
+    $i = 0;
+    foreach ($information['days'] as $row) {
+      $obj = new stdClass;
+      $obj->dayname = $row;
+      $obj->from = $information['timings_from'][$i];
+      $obj->to = $information['timings_to'][$i];
+      array_push($timings_arr, $obj);
+      $i++;
+    }
+    $this->data['timings'] = json_encode($timings_arr);
+    $this->data['is_approved'] = 0;
+    $this->data['created_at'] = $this->__currentdatetime;
+
+    $result = $this->Appuser_model->save_location($this->data);
+
+    if ($result) {
+      $success = array('success' => 1);
+      print_r(json_encode($success));
+      exit;
+    } else {
+      $errors = array('error' => 'Unable to save');
+      print_r(json_encode($errors));
+      exit;
+    }
+  }
 }

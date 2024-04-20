@@ -30,3 +30,4 @@ $route['app-dashboard'] = "Appuser/dashboard";
 $route['app-view-doctor-location'] = "Appuser/doctor_location";
 $route['app-call-submit'] = "Appuser/call_submit";
 $route['app-get-my-history'] = "Appuser/get_my_history";
+$route['app-new-location-submit'] = "Appuser/new_location_submit";

@@ -264,7 +264,7 @@
                                                                         <div class="form-group has-icon-left">
                                                                             <label for="password-id-icon">Latitude</label>
                                                                             <div class="position-relative">
-                                                                                <input type="number" step="0.000000000000001" min="-90" max="90" class="form-control latlng" placeholder="Latitude" id="lat" required>
+                                                                                <input type="number" step="0.000000000000001" min="-90" max="90" class="form-control latlng" placeholder="Latitude" name="latitude" required>
                                                                                 <div class="form-control-icon">
                                                                                     <i class="bi bi-geo-alt"></i>
                                                                                 </div>
@@ -275,7 +275,7 @@
                                                                         <div class="form-group has-icon-left">
                                                                             <label for="password-id-icon">Longitude</label>
                                                                             <div class="position-relative">
-                                                                                <input type="number" step="0.000000000000001" min="-180" max="180" class="form-control latlng" placeholder="Longitude" id="lng" required>
+                                                                                <input type="number" step="0.000000000000001" min="-180" max="180" class="form-control latlng" placeholder="Longitude" name="longitude" required>
                                                                                 <div class="form-control-icon">
                                                                                     <i class="bi bi-geo-alt"></i>
                                                                                 </div>
@@ -386,6 +386,7 @@
                         $(window).scrollTop(0);
                     } else if (obj.success) {
                         $("#spinner").addClass("d-none");
+                        $(":submit").removeClass("d-none");
                         toastr.success("Success!", "Location added for approval!");
                     } else {
                         $("#spinner").addClass("d-none");

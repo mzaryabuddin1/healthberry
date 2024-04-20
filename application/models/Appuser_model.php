@@ -148,6 +148,11 @@ class Appuser_model extends CI_Model {
       return ($this->db->insert('location_calls', $params));
   }
 
+  public function save_location($params)
+  {
+      return ($this->db->insert('locations', $params));
+  }
+
 
   // ------------------------------------------------------------------------
 
