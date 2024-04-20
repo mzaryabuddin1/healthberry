@@ -67,6 +67,32 @@ class Appuser_model extends CI_Model {
       ->result_array());
   }
 
+  public function get_history($params)
+  {
+      return ($this->db->select('
+      location_calls.*,
+      locations.doctor_name,
+      locations.area,
+      locations.city,
+      locations.chemists,
+      locations.specialities,
+      locations.timings,
+      locations.latitude as loc_latitude,
+      locations.longitude as loc_longitude,
+      cities.city_name
+      ',
+      )
+      ->from('location_calls')
+      ->where('location_calls.app_user_id', $params)
+      ->join('app_users', 'app_users.id = location_calls.app_user_id', 'left')
+      ->join('locations', 'locations.id = location_calls.location_id', 'left')
+      ->join('weekly_plan', 'weekly_plan.id = location_calls.plan_id', 'left')
+      ->join('cities', 'cities.id = locations.city', 'left')
+      ->order_by('location_calls.created_at', 'desc') 
+      ->get()
+      ->result_array());
+  }
+
   public function get_doctor_location_by_plan_id($params)
   {
       return ($this->db->select('
@@ -90,6 +116,12 @@ class Appuser_model extends CI_Model {
       ->get()
       ->result_array());
   }
+
+  public function save_call($params)
+  {
+      return ($this->db->insert('location_calls', $params));
+  }
+
 
   // ------------------------------------------------------------------------
 
