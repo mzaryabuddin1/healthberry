@@ -41,7 +41,7 @@
 											<div class="card card-lg card-border">
 												<div class="card-body">
 													<h4 class="mb-4 text-center">Sign in to your account</h4>
-													<div class="alert alert-danger <?=  !isset($_GET['error']) ? 'd-none': "" ?> " role="alert" id="error"> <?=  isset($_GET['error']) ? $_GET['error'] : "" ?> </div>
+													<div class="alert alert-danger <?= !isset($_GET['error']) ? 'd-none' : "" ?> " role="alert" id="error"> <?= isset($_GET['error']) ? $_GET['error'] : "" ?> </div>
 													<div class="row gx-3">
 														<div class="form-group col-lg-12">
 															<div class="form-label-group">

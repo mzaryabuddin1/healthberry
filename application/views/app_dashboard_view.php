@@ -28,7 +28,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Plan</a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            <li class="nav-item" role="presentation" id="locationtab">
                                 <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Locations</a>
                             </li>
                             <li class="nav-item" role="presentation" id="historytab">
@@ -94,25 +94,211 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                Integer interdum diam eleifend metus lacinia, quis gravida eros mollis.
-                                Fusce non sapien
-                                sit amet magna dapibus
-                                ultrices. Morbi tincidunt magna ex, eget faucibus sapien bibendum non. Duis
-                                a mauris ex.
-                                Ut finibus risus sed massa
-                                mattis porta. Aliquam sagittis massa et purus efficitur ultricies. Integer
-                                pretium dolor
-                                at sapien laoreet ultricies.
-                                Fusce congue et lorem id convallis. Nulla volutpat tellus nec molestie
-                                finibus. In nec
-                                odio tincidunt eros finibus
-                                ullamcorper. Ut sodales, dui nec posuere finibus, nisl sem aliquam metus, eu
-                                accumsan
-                                lacus felis at odio. Sed lacus
-                                quam, convallis quis condimentum ut, accumsan congue massa. Pellentesque et
-                                quam vel
-                                massa pretium ullamcorper vitae eu
-                                tortor.
+                                <div class="row">
+                                    <div class="col-12">
+                                        <form id="regstr">
+                                            <div class="card">
+                                                <div class="card-content">
+                                                    <div class="card-body">
+                                                        <form class="form form-vertical" id="regstr">
+                                                            <div class="form-body">
+                                                                <div class="row">
+
+                                                                    <div class="col-md-4 col-12">
+                                                                        <div class="form-group has-icon-left">
+                                                                            <label for="first-name-icon">Doctor Name</label>
+                                                                            <div class="position-relative">
+                                                                                <input type="text" class="form-control" name="doctor_name" minlength="3" placeholder="Doctor name" required>
+                                                                                <div class="form-control-icon">
+                                                                                    <i class="bi bi-person"></i>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 col-12">
+                                                                        <div class="form-group has-icon-left">
+                                                                            <label for="email-id-icon">Products</label>
+                                                                            <div class="position-relative">
+                                                                                <select class="choices form-select multiple-remove" name="products[]" multiple="multiple" required>
+                                                                                    <?php foreach($products as $row) : ?>
+                                                                                        <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
+
+                                                                                    <?php endforeach; ?>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 col-12">
+                                                                        <div class="form-group has-icon-left">
+                                                                            <label for="mobile-id-icon">Area</label>
+                                                                            <div class="position-relative">
+                                                                                <input type="text" class="form-control" placeholder="Area" name="area" required>
+                                                                                <div class="form-control-icon">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-map" viewBox="0 0 16 16">
+                                                                                        <path fill-rule="evenodd" d="M3.1 11.2a.5.5 0 0 1 .4-.2H6a.5.5 0 0 1 0 1H3.75L1.5 15h13l-2.25-3H10a.5.5 0 0 1 0-1h2.5a.5.5 0 0 1 .4.2l3 4a.5.5 0 0 1-.4.8H.5a.5.5 0 0 1-.4-.8z" />
+                                                                                        <path fill-rule="evenodd" d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z" />
+                                                                                    </svg>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 col-12">
+                                                                        <div class="form-group has-icon-left">
+                                                                            <label for="password-id-icon">City</label>
+                                                                            <div class="position-relative">
+                                                                                <select class="choices form-select" name="city" required>
+                                                                                    <?php foreach($cities as $row) : ?>
+                                                                                        <option value="<?= $row['id'] ?>"><?= $row['city_name'] ?></option>
+
+                                                                                    <?php endforeach; ?>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 col-12">
+                                                                        <div class="form-group has-icon-left">
+                                                                            <div class="d-flex justify-content-between">
+                                                                                <label for="password-id-icon">Chemists</label>
+                                                                                <button type="button" class="btn btn-sm btn-outline-secondary" id="add-chemist">Add More</button>
+                                                                            </div>
+                                                                            <div class="position-relative">
+                                                                                <input type="text" class="form-control" placeholder="Chemist" name="chemists[]">
+                                                                                <div class="form-control-icon">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shop" viewBox="0 0 16 16">
+                                                                                        <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.37 2.37 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm3 0h-2v3h2z" />
+                                                                                    </svg>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div id="chemists-more-inputs">
+                                                                                <!-- <div class="input-group mt-2">
+                                                                                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-bookmark"></i></span>
+                                                                                    <input type="text" style="padding-left: 5px !important;" class="form-control" placeholder="Chemist" name="chemists[]" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                                                                    <button class="btn btn-danger" type="button">-</button>
+                                                                                </div> -->
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 col-12">
+                                                                        <div class="form-group has-icon-left">
+                                                                            <div class="d-flex justify-content-between">
+                                                                                <label for="password-id-icon">Specialities</label>
+                                                                                <button type="button" class="btn btn-sm btn-outline-secondary" id="add-specialities">Add More</button>
+                                                                            </div>
+                                                                            <div class="position-relative">
+                                                                                <input type="text" class="form-control" placeholder="Specialities" name="specialities[]">
+                                                                                <div class="form-control-icon">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-raised-hand" viewBox="0 0 16 16">
+                                                                                        <path d="M6 6.207v9.043a.75.75 0 0 0 1.5 0V10.5a.5.5 0 0 1 1 0v4.75a.75.75 0 0 0 1.5 0v-8.5a.25.25 0 1 1 .5 0v2.5a.75.75 0 0 0 1.5 0V6.5a3 3 0 0 0-3-3H6.236a1 1 0 0 1-.447-.106l-.33-.165A.83.83 0 0 1 5 2.488V.75a.75.75 0 0 0-1.5 0v2.083c0 .715.404 1.37 1.044 1.689L5.5 5c.32.32.5.754.5 1.207" />
+                                                                                        <path d="M8 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3" />
+                                                                                    </svg>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div id="specialities-more-input">
+                                                                                <!-- <div class="input-group mt-2">
+                                                                                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-bookmark"></i></span>
+                                                                                    <input type="text" style="padding-left: 5px !important;" class="form-control" placeholder="Specialities" name="specialities[]" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                                                                    <button class="btn btn-danger" type="button">-</button>
+                                                                                </div> -->
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 col-12">
+                                                                        <div class="form-group">
+                                                                            <div class="d-flex justify-content-between">
+                                                                                <label for="password-id-icon">Timings</label>
+                                                                                <button type="button" class="btn btn-sm btn-outline-secondary" id="add-timings">Add More</button>
+                                                                            </div>
+                                                                            <div class="position-relative">
+                                                                                <div class="row">
+                                                                                    <div class="col-4">
+                                                                                        <select name="days[]" class="form-control" required>
+                                                                                            <option value="Monday">Mon</option>
+                                                                                            <option value="Tuesday">Tue</option>
+                                                                                            <option value="Wednesday">Wed</option>
+                                                                                            <option value="Thursday">Thu</option>
+                                                                                            <option value="Friday">Fri</option>
+                                                                                            <option value="Saturday">Sat</option>
+                                                                                            <option value="Sunday">Sun</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="col-4">
+                                                                                        <input type="time" class="form-control" placeholder="T" name="timings_from[]">
+                                                                                    </div>
+                                                                                    <div class="col-4">
+                                                                                        <input type="time" class="form-control" placeholder="T" name="timings_to[]">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div id="timings-more-input">
+                                                                                    <!-- <div class="row mt-2">
+                                                                                        <div class="col-4">
+                                                                                            <select name="days[]" class="form-control" required>
+                                                                                                <option value="Monday">Mon</option>
+                                                                                                <option value="Tuesday">Tue</option>
+                                                                                                <option value="Wednesday">Wed</option>
+                                                                                                <option value="Thursday">Thu</option>
+                                                                                                <option value="Friday">Fri</option>
+                                                                                                <option value="Saturday">Sat</option>
+                                                                                                <option value="Sunday">Sun</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                        <div class="col-4">
+                                                                                            <div class="input-group">
+                                                                                                <input type="time" style="padding-left: 5px !important;" class="form-control" placeholder="Specialities" name="timings[]" aria-label="Recipient username" aria-describedby="button-addon2" required>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-4">
+                                                                                            <div class="input-group">
+                                                                                              
+                                                                                                <input type="time" style="padding-left: 5px !important;" class="form-control" placeholder="Specialities" name="timings[]" aria-label="Recipient username" aria-describedby="button-addon2" required>
+                                                                                                <button class="btn btn-danger" type="button">-</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div> -->
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 col-12">
+                                                                        <div class="form-group has-icon-left">
+                                                                            <label for="password-id-icon">Latitude</label>
+                                                                            <div class="position-relative">
+                                                                                <input type="number" step="0.000000000000001" min="-90" max="90" class="form-control latlng" placeholder="Latitude" id="lat" required>
+                                                                                <div class="form-control-icon">
+                                                                                    <i class="bi bi-geo-alt"></i>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 col-12">
+                                                                        <div class="form-group has-icon-left">
+                                                                            <label for="password-id-icon">Longitude</label>
+                                                                            <div class="position-relative">
+                                                                                <input type="number" step="0.000000000000001" min="-180" max="180" class="form-control latlng" placeholder="Longitude" id="lng" required>
+                                                                                <div class="form-control-icon">
+                                                                                    <i class="bi bi-geo-alt"></i>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <div id="map"></div>
+                                                                        <button id="resetMarkerBtn" type="button" class="btn btn-block btn-primary">RESET CURRENT LOCATION</button>
+                                                                    </div>
+                                                                    <div class="col-12 mt-3 d-flex justify-content-end">
+                                                                        <button type="submit" class="btn btn-outline-success me-1 mb-1">Submit For Approval</button>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                                 <div class="table-responsive mt-3">
@@ -175,13 +361,13 @@
     $(function() {
         $("#regstr").on("submit", function(e) {
             e.preventDefault();
-            var formdata = new FormData(this);
+            // var formdata = new FormData(this);
+            var formdata = $(this).serialize();
+            
             $.ajax({
-                url: "<?php echo base_url() . "app-login-submit"; ?>",
+                url: "<?php echo base_url() . "app-new-location-submit"; ?>",
                 type: "post",
                 data: formdata,
-                processData: false, // tell jQuery not to process the data
-                contentType: false, // tell jQuery not to set contentType
                 cache: false,
                 beforeSend: function() {
                     $(":submit").prop("disabled", true);
@@ -200,10 +386,7 @@
                         $(window).scrollTop(0);
                     } else if (obj.success) {
                         $("#spinner").addClass("d-none");
-                        toastr.success("Welcome!", "On Board!");
-                        setTimeout(function() {
-                            window.location = '<?php echo base_url() . 'app-dashboard' ?>';
-                        }, 1000);
+                        toastr.success("Success!", "Location added for approval!");
                     } else {
                         $("#spinner").addClass("d-none");
                         $(":submit").prop("disabled", false);
@@ -496,6 +679,112 @@
         })
     })
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var inputElement = document.getElementById("inputArray");
+
+        inputElement.addEventListener("input", function() {
+            var value = this.value.trim();
+            if (value.includes(",")) {
+                var valuesArray = value.split(",").map(function(item) {
+                    return item.trim();
+                });
+                this.value = "[" + valuesArray.map(function(item) {
+                    return '"' + item + '"';
+                }).join(", ") + "]";
+            }
+        });
+    });
+</script>
+
+<script>
+    $("#add-chemist").on("click", function() {
+        const html = '<div class="input-group mt-2"><span class="input-group-text" id="basic-addon1"><i class="bi bi-bookmark"></i></span><input type="text" style="padding-left: 5px !important;" class="form-control" placeholder="Chemist" name="chemists[]" aria-label="" aria-describedby="button-addon2"><button class="btn btn-danger removechemist" type="button">-</button></div>'
+        $("#chemists-more-inputs").append(html)
+        $(".removechemist").bind("click", function() {
+            $(this).parent().remove()
+        })
+    })
+    $("#add-specialities").on("click", function() {
+        const html = '<div class="input-group mt-2"><span class="input-group-text" id="basic-addon1"><i class="bi bi-bookmark"></i></span><input type="text" style="padding-left: 5px !important;" class="form-control" placeholder="Specialities" name="specialities[]" aria-label="" aria-describedby="button-addon2"><button class="btn btn-danger removespecial" type="button">-</button></div>'
+        $("#specialities-more-input").append(html)
+        $(".removespecial").bind("click", function() {
+            $(this).parent().remove()
+        })
+    })
+    $("#add-timings").on("click", function() {
+        const html = '<div class="row mt-2"><div class="col-4"><select name="days[]" class="form-control" required><option value="Monday">Mon</option><option value="Tuesday">Tue</option><option value="Wednesday">Wed</option><option value="Thursday">Thu</option><option value="Friday">Fri</option><option value="Saturday">Sat</option><option value="Sunday">Sun</option></select></div><div class="col-4"><div class="input-group"><input type="time" style="padding-left: 5px !important;" class="form-control"  name="timings_from[]" aria-label="Recipient username" aria-describedby="button-addon2" required></div></div><div class="col-4"><div class="input-group"><input type="time" style="padding-left: 5px !important;" class="form-control"  name="timings_to[]" aria-label="Recipient username" aria-describedby="button-addon2" required><button class="btn btn-danger removetimings" type="button">-</button></div></div></div>'
+
+        $("#timings-more-input").append(html)
+        $(".removetimings").bind("click", function() {
+            $(this).parent().parent().parent().remove()
+        })
+    })
+</script>
+
+
+<style>
+    /* Style the map container */
+    #map {
+        height: 400px;
+        width: 100%;
+    }
+</style>
+<script>
+    var map;
+    var marker;
+    $(".latlng").on("wheel", function(e) {
+        e.preventDefault();
+    });
+    $("#locationtab").on("click", function() {
+        setTimeout(function() {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+
+                $("#lat").val(latitude)
+                $("#lng").val(longitude)
+
+                // Initialize the map
+                map = L.map('map').setView([latitude, longitude], 18); // Centered at [0,0], zoom level 5
+                // Add OpenStreetMap tiles as the base layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                // Add a marker to the map at the user's current location
+                marker = L.marker([latitude, longitude]).addTo(map);
+
+                // Event listener for map click
+                map.on('click', function(e) {
+                    var newLatLng = e.latlng;
+                    marker.setLatLng(newLatLng); // Update marker position
+                    map.panTo(newLatLng); // Move map to the clicked position
+                    $("#lat").val(newLatLng.lat);
+                    $("#lng").val(newLatLng.lng);
+                });
+            });
+        }, 1500); // 100 milliseconds delay
+    })
+</script>
+
+<script>
+    $("#resetMarkerBtn").on("click", function() {
+        // Get current geolocation
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+
+            // Update marker position, map center, and input fields
+            marker.setLatLng([latitude, longitude]);
+            map.setView([latitude, longitude]);
+            $("#lat").val(latitude);
+            $("#lng").val(longitude);
+        });
+    });
+</script>
+
 
 </body>
 
