@@ -264,7 +264,7 @@
                                                                         <div class="form-group has-icon-left">
                                                                             <label for="password-id-icon">Latitude</label>
                                                                             <div class="position-relative">
-                                                                                <input type="number" step="0.000000000000001" min="-90" max="90" class="form-control latlng" placeholder="Latitude" name="latitude" required>
+                                                                                <input type="number" step="0.000000000000001" id="lat" min="-90" max="90" class="form-control latlng" placeholder="Latitude" name="latitude" required>
                                                                                 <div class="form-control-icon">
                                                                                     <i class="bi bi-geo-alt"></i>
                                                                                 </div>
@@ -275,7 +275,7 @@
                                                                         <div class="form-group has-icon-left">
                                                                             <label for="password-id-icon">Longitude</label>
                                                                             <div class="position-relative">
-                                                                                <input type="number" step="0.000000000000001" min="-180" max="180" class="form-control latlng" placeholder="Longitude" name="longitude" required>
+                                                                                <input type="number" step="0.000000000000001" min="-180" max="180" class="form-control latlng" placeholder="Longitude" id="lng" name="longitude" required>
                                                                                 <div class="form-control-icon">
                                                                                     <i class="bi bi-geo-alt"></i>
                                                                                 </div>
@@ -736,7 +736,7 @@
     var map;
     var marker;
     $(".latlng").on("wheel", function(e) {
-        e.preventDefault();
+        // e.preventDefault();
     });
     $("#locationtab").on("click", function() {
         setTimeout(function() {
