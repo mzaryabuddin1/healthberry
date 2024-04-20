@@ -24,3 +24,32 @@
 <script src="<?= base_url() ?>mazer/assets/js/bootstrap.bundle.min.js"></script>
 <script src="<?= base_url() ?>mazer/assets/vendors/fontawesome/all.min.js"></script>
 <script src="<?= base_url() ?>mazer/assets/js/main.js"></script>
+
+<script>
+    function updateClock() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+        var seconds = now.getSeconds();
+        var day = now.toLocaleString('en-US', {
+            weekday: 'long'
+        });
+        var date = now.toLocaleDateString('en-US');
+
+        hours = (hours < 10 ? "0" : "") + hours;
+        minutes = (minutes < 10 ? "0" : "") + minutes;
+        seconds = (seconds < 10 ? "0" : "") + seconds;
+
+        var timeString = hours + ":" + minutes + ":" + seconds;
+        var dateTimeString = day + ", " + date + " " + timeString;
+
+        document.getElementById("clock").innerText = dateTimeString;
+    }
+
+
+    // Update the clock every second
+    setInterval(updateClock, 1000);
+
+    // Initial call to display the clock immediately
+    updateClock();
+</script>

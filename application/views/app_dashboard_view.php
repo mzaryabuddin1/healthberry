@@ -14,6 +14,16 @@
                         <a class="btn btn-danger" href="<?= base_url() ?>app-logout">Logout</a>
                     </div>
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="alert alert-danger  <?= isset($_GET['err']) ? "" : "d-none" ?>" role="alert" id="error"><?= isset($_GET['err']) ? $_GET['err'] : "" ?></div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <div class="spinner-border text-dark d-none" role="status" id="spinner">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Plan</a>
@@ -21,7 +31,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Locations</a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            <li class="nav-item" role="presentation" id="historytab">
                                 <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">History</a>
                             </li>
                         </ul>
@@ -72,8 +82,9 @@
                                                     </td>
                                                     <td>
                                                         <div class="btn-group actBtns" role="group" aria-label="Basic example">
-                                                            <button type="button" class="btn btn-outline-primary btn-md callbtn" data-doctor="<?= ucfirst($row['doctor_name']) ?>"><i class="bi bi-telephone-fill"></i></button>
-                                                            <a class="btn btn-outline-danger btn-md" href="<?= base_url() . 'app-view-doctor-location?id=' . $row['id']?>"><i class="bi bi-geo-alt"></i></a>
+                                                            <button type="button" class="btn btn-outline-primary btn-md callbtn" data-doctor="<?= ucfirst($row['doctor_name']) ?>" data-planid="<?= ucfirst($row['id']) ?>" data-locationid="<?= ucfirst($row['location_id']) ?>"><i class="bi bi-telephone-fill"></i></button>
+
+                                                            <a class="btn btn-outline-danger btn-md" href="<?= base_url() . 'app-view-doctor-location?id=' . $row['id'] ?>"><i class="bi bi-geo-alt"></i></a>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -81,9 +92,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-
-
-
                             </div>
                             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 Integer interdum diam eleifend metus lacinia, quis gravida eros mollis.
@@ -107,15 +115,22 @@
                                 tortor.
                             </div>
                             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                                <p class="mt-2">Duis ultrices purus non eros fermentum hendrerit. Aenean
-                                    ornare interdum
-                                    viverra. Sed ut odio velit. Aenean eu diam
-                                    dictum nibh rhoncus mattis quis ac risus. Vivamus eu congue ipsum.
-                                    Maecenas id
-                                    sollicitudin ex. Cras in ex vestibulum,
-                                    posuere orci at, sollicitudin purus. Morbi mollis elementum enim, in
-                                    cursus sem
-                                    placerat ut.</p>
+                                <div class="table-responsive mt-3">
+                                    <table class="table table-bordered table-hover">
+                                        <thead class="bg-secondary text-light text-center">
+                                            <th>DATETIME</th>
+                                            <th>DOCTOR</th>
+                                            <th>CITY</th>
+                                            <th>AREA</th>
+                                            <th>CHEMIST</th>
+                                            <th>SPECI.</th>
+                                            <th>PICTURE</th>
+                                        </thead>
+                                        <tbody id="history-body">
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -132,6 +147,26 @@
 
 <?php require_once("common2/footer.php") ?>
 
+<!-- Modal -->
+<div class="modal fade" id="cameraModal" tabindex="-1" role="dialog" aria-labelledby="cameraModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cameraModalLabel">Camera</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <video id="cameraView" width="100%" autoplay playsinline></video>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="captureBtn">Capture</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     $(function() {
@@ -189,53 +224,248 @@
 </script>
 
 <script>
-    function updateClock() {
-        var now = new Date();
-        var hours = now.getHours();
-        var minutes = now.getMinutes();
-        var seconds = now.getSeconds();
-        var day = now.toLocaleString('en-US', {
-            weekday: 'long'
+    // $(".callbtn").on("click", function(e) {
+    //     // Store the value of data-planid in a variable
+    //     var planId = $(this).data("planid");
+
+    //     // Define the formdata object with default values
+    //     var formdata = {
+    //         plan_id: planId,
+    //         latitude: 0,
+    //         longitude: 0
+    //     };
+
+    //     // Get the current location
+    //     navigator.geolocation.getCurrentPosition(function(position) {
+    //         // Update latitude and longitude with current position
+    //         formdata.latitude = position.coords.latitude;
+    //         formdata.longitude = position.coords.longitude;
+
+    //         // Open camera modal
+    //         $('#cameraModal').modal('show');
+
+    //         // Get camera stream and display in modal
+    //         navigator.mediaDevices.getUserMedia({
+    //                 video: true
+    //             })
+    //             .then(function(stream) {
+    //                 var video = document.getElementById('cameraView');
+    //                 video.srcObject = stream;
+    //                 video.play();
+    //             })
+    //             .catch(function(err) {
+    //                 console.log("An error occurred: " + err);
+    //             });
+
+    //         // Handle capture button click
+    //         $('#captureBtn').on('click', function() {
+    //             var video = document.getElementById('cameraView');
+    //             var canvas = document.createElement('canvas');
+    //             var context = canvas.getContext('2d');
+
+    //             canvas.width = video.videoWidth;
+    //             canvas.height = video.videoHeight;
+    //             context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    //             var imageData = canvas.toDataURL('image/jpeg');
+
+    //             // Close camera stream
+    //             video.srcObject.getTracks().forEach(function(track) {
+    //                 track.stop();
+    //             });
+
+    //             // Close camera modal
+    //             $('#cameraModal').modal('hide');
+
+    //             // Append image data to formdata
+    //             formdata.imageData = imageData;
+
+    //             // Send AJAX request
+    //             $.ajax({
+    //                 url: "<?php echo base_url() . "app-call-submit"; ?>",
+    //                 type: "post",
+    //                 data: formdata,
+    //                 beforeSend: function() {
+    //                     // Disable submit button and show spinner
+    //                     $(".callbtn").prop("disabled", true);
+    //                     $("#spinner").removeClass("d-none");
+    //                     $("#error").addClass("d-none");
+    //                 },
+    //                 success: function(res) {
+    //                     // Handle success response
+    //                 },
+    //                 error: function(error) {
+    //                     // Handle error response
+    //                 },
+    //                 complete: function() {
+    //                     // Enable submit button and hide spinner
+    //                     $(".callbtn").prop("disabled", false);
+    //                     $("#spinner").addClass("d-none");
+    //                 }
+    //             });
+    //         });
+    //     });
+    // });
+
+    let formdata
+
+    // Event listener for call button click
+    $(".callbtn").on("click", function(e) {
+        // Store the value of data-planid in a variable
+        var planId = $(this).data("planid");
+        var locationid = $(this).data("locationid");
+
+        // Define the formdata object with default values
+        formdata = {
+            plan_id: planId,
+            location_id: locationid,
+            latitude: 0,
+            longitude: 0
+        };
+
+        // Get the current location
+        navigator.geolocation.getCurrentPosition(function(position) {
+            // Update latitude and longitude with current position
+            formdata.latitude = position.coords.latitude;
+            formdata.longitude = position.coords.longitude;
+
+            // Open camera modal
+            $('#cameraModal').modal('show');
+
+            // Get camera stream and display in modal
+            navigator.mediaDevices.getUserMedia({
+                    video: true
+                })
+                .then(function(stream) {
+                    var video = document.getElementById('cameraView');
+                    video.srcObject = stream;
+                    video.play();
+                })
+                .catch(function(err) {
+                    console.log("An error occurred: " + err);
+                });
         });
-        var date = now.toLocaleDateString('en-US');
+    });
 
-        hours = (hours < 10 ? "0" : "") + hours;
-        minutes = (minutes < 10 ? "0" : "") + minutes;
-        seconds = (seconds < 10 ? "0" : "") + seconds;
+    // Event listener for capture button click
+    $('#captureBtn').on('click', function() {
+        var video = document.getElementById('cameraView');
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
 
-        var timeString = hours + ":" + minutes + ":" + seconds;
-        var dateTimeString = day + ", " + date + " " + timeString;
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        var imageData = canvas.toDataURL('image/jpeg');
 
-        document.getElementById("clock").innerText = dateTimeString;
-    }
+        // Close camera stream
+        video.srcObject.getTracks().forEach(function(track) {
+            track.stop();
+        });
 
+        // Close camera modal
+        $('#cameraModal').modal('hide');
 
-    // Update the clock every second
-    setInterval(updateClock, 1000);
+        // Append image data to formdata
+        formdata.imageData = imageData;
 
-    // Initial call to display the clock immediately
-    updateClock();
+        // Send AJAX request
+        $.ajax({
+            url: "<?php echo base_url() . "app-call-submit"; ?>",
+            type: "post",
+            data: formdata,
+            beforeSend: function() {
+                // Disable submit button and show spinner
+                $(".callbtn").prop("disabled", true);
+                $("#spinner").removeClass("d-none");
+                $("#error").addClass("d-none");
+            },
+            success: function(res) {
+                let obj = JSON.parse(res);
+                if (obj.error) {
+                    $("#error").html(obj.error);
+                    $("#error").removeClass("d-none");
+                    $("#spinner").addClass("d-none");
+                    toastr.error("Please check errors list!", "Error");
+                    $(window).scrollTop(0);
+                } else if (obj.success) {
+                    $("#spinner").addClass("d-none");
+                    toastr.success("Success!", "Call Successfully Added!");
+                } else {
+                    $("#spinner").addClass("d-none");
+                    $(".callbtn").prop("disabled", false);
+                    toastr.error("Something bad happened!", "Error");
+                    $(window).scrollTop(0);
+                }
+
+                $(".callbtn").prop("disabled", false);
+            },
+            error: function(error) {
+                toastr.error("Error while sending request to server!", "Error");
+                $(window).scrollTop(0);
+                $("#spinner").addClass("d-none");
+                $(".callbtn").prop("disabled", false);
+            }
+        });
+    });
 </script>
 
 <script>
-    $(".callbtn").on("click", () => {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, Call!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: "Deleted!",
-                    text: "Your file has been deleted.",
-                    icon: "success"
-                });
+    // Function to format date
+    function formatDate(dateString) {
+        var date = new Date(dateString);
+        return date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+    }
+
+    // Function to capitalize the first letter of a string
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
+    $("#historytab").on("click", function() {
+        $.ajax({
+            url: "<?php echo base_url() . "app-get-my-history"; ?>",
+            beforeSend: function() {
+					$("#spinner").removeClass("d-none");
+            },
+            success: function(res) {
+                $("#spinner").addClass("d-none");
+                let obj = JSON.parse(res);
+                let html = ""
+
+                obj.map(row => {
+                    html += "<tr>"
+                    html += "<td>" + formatDate(row.created_at) + "</td>"
+                    html += "<td>"+ capitalizeFirstLetter(row.doctor_name) + "</td>"
+                    html += "<td>" + capitalizeFirstLetter(row.city_name) +"</td>"
+                    html += "<td>" + capitalizeFirstLetter(row.area) +"</td>"
+
+                    html += "<td>"
+                    const parsedChemists = JSON.parse(row.chemists);
+                    parsedChemists.map(chemist => {
+                        html += capitalizeFirstLetter(chemist) + '<br>';
+                    })
+                    html += "</td>"
+
+                    html += "<td>"
+                    const parsedSpecialities  = JSON.parse(row.specialities);
+                    parsedSpecialities.map(special => {
+                        html += capitalizeFirstLetter(special) + '<br>';
+                    })
+                    html += "</td>"
+
+                    html += '<td class="text-center"><img src="' + row.evidance_picture + '" width="100px" alt=""></td>';
+
+                    html += "</tr>"
+                })
+
+                $("#history-body").html(html)
+
+            },
+            error: function(error) {
+                $("#spinner").addClass("d-none");
+                toastr.error("Error while sending request to server!", "Error");
             }
-        });
+        })
     })
 </script>
 

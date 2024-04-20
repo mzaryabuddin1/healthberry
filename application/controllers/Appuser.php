@@ -5,11 +5,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Appuser extends CI_Controller
 {
   private $data;
+  private $__currentdatetime;
 
   public function __construct()
   {
     parent::__construct();
     $this->load->model('Appuser_model');
+    date_default_timezone_set("Asia/Karachi");
+    $this->__currentdatetime = date("Y-m-d H:i:s", time());
   }
 
   public function index()
@@ -37,7 +40,6 @@ class Appuser extends CI_Controller
       exit;
     }
 
-    $this->__currentdatetime = date("Y-m-d H:i:s", time());
 
     $information = $this->security->xss_clean($this->input->post());
     $this->data['username'] = $information['username'];
@@ -79,6 +81,7 @@ class Appuser extends CI_Controller
   {
     $this->checksession();
     $this->data['plan'] = $this->Appuser_model->get_plan($_SESSION['app_user_id']);
+    // $this->data['history'] = $this->Appuser_model->get_history($_SESSION['app_user_id']);
     $this->load->view("app_dashboard_view", $this->data);
   }
 
@@ -91,8 +94,57 @@ class Appuser extends CI_Controller
     $this->load->view("app_view_doctor_location", $this->data);
   }
 
+  public function get_my_history(){
+    $this->checksession();
+    $this->data['history'] = $this->Appuser_model->get_history($_SESSION['app_user_id']);
+    echo json_encode($this->data['history']);
+  }
 
+  public function call_submit()
+  {
+    $this->checksession();
 
+    $this->form_validation->set_rules('plan_id', 'Plan ID', 'required|integer');
+    $this->form_validation->set_rules('latitude', 'Latitude', 'required|numeric|greater_than_equal_to[-90]|less_than_equal_to[90]');
+    $this->form_validation->set_rules('longitude', 'Longitude', 'required|numeric|greater_than_equal_to[-180]|less_than_equal_to[180]');
+    $this->form_validation->set_rules('imageData', 'Image', 'required');
 
+    if ($this->form_validation->run() == false) {
+			$errors = array('error' => validation_errors());
+			print_r(json_encode($errors));
+			exit;
+		}
+
+    // Decode base64-encoded image data
+    $decodedImageData = base64_decode(str_replace('data:image/jpeg;base64,', '', $this->input->post("imageData")));
+    // Generate a unique filename
+    $filename = uniqid() . '.jpg';
+    // Specify the path to save the image
+    $pathToSave = FCPATH . 'uploads/' . $filename;
+    // Save the image to file
+    file_put_contents($pathToSave, $decodedImageData);
+
+    $information = $this->security->xss_clean($this->input->post());
+    $this->data['app_user_id'] = $_SESSION['app_user_id'];
+		$this->data['location_id'] = $information['location_id'];
+		$this->data['plan_id'] = $information['plan_id'] ? $information['plan_id'] : null;
+    $this->data['latitude'] = $information['latitude'];
+    $this->data['longitude'] = $information['longitude'];
+    $this->data['evidance_picture'] = base_url() . "uploads/" .$filename;
+    $this->data['created_at'] = $this->__currentdatetime;
+
+    $result = $this->Appuser_model->save_call($this->data);
+
+    if($result){
+      $success = array('success' => 1);
+      print_r(json_encode($success));
+      exit;
+    }else{
+      $errors = array('error' => 'Unable to save');
+      print_r(json_encode($errors));
+      exit;
+    }
+   
+  }
   
 }
