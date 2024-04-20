@@ -53,7 +53,7 @@
                                             <?php foreach ($plan as $row) : ?>
                                                 <tr>
                                                     <td><?= ucfirst($row['doctor_name']) ?></td>
-                                                    <td><?= ucfirst($row['city']) ?></td>
+                                                    <td><?= ucfirst($row['city_name']) ?></td>
                                                     <td><?= ucfirst($row['area']) ?></td>
                                                     <td>
                                                         <?php
@@ -153,15 +153,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="cameraModalLabel">Camera</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+                    &times;
                 </button>
             </div>
             <div class="modal-body">
                 <video id="cameraView" width="100%" autoplay playsinline></video>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn" data-bs-dismiss="modal">
+                    <i class="bx bx-x d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Close</span>
+                </button>
                 <button type="button" class="btn btn-primary" id="captureBtn">Capture</button>
             </div>
         </div>
@@ -306,105 +309,130 @@
     //     });
     // });
 
-    let formdata
+    $(document).ready(function() {
+        let formdata;
 
-    // Event listener for call button click
-    $(".callbtn").on("click", function(e) {
-        // Store the value of data-planid in a variable
-        var planId = $(this).data("planid");
-        var locationid = $(this).data("locationid");
+        // Function to stop the camera stream
+        function stopCameraStream() {
+            var video = document.getElementById('cameraView');
+            if (video.srcObject) {
+                var stream = video.srcObject;
+                var tracks = stream.getTracks();
 
-        // Define the formdata object with default values
-        formdata = {
-            plan_id: planId,
-            location_id: locationid,
-            latitude: 0,
-            longitude: 0
-        };
-
-        // Get the current location
-        navigator.geolocation.getCurrentPosition(function(position) {
-            // Update latitude and longitude with current position
-            formdata.latitude = position.coords.latitude;
-            formdata.longitude = position.coords.longitude;
-
-            // Open camera modal
-            $('#cameraModal').modal('show');
-
-            // Get camera stream and display in modal
-            navigator.mediaDevices.getUserMedia({
-                    video: true
-                })
-                .then(function(stream) {
-                    var video = document.getElementById('cameraView');
-                    video.srcObject = stream;
-                    video.play();
-                })
-                .catch(function(err) {
-                    console.log("An error occurred: " + err);
+                tracks.forEach(function(track) {
+                    track.stop();
                 });
+
+                video.srcObject = null;
+            }
+        }
+
+        // Event listener for call button click
+        $(".callbtn").on("click", function(e) {
+            // Store the value of data-planid and data-locationid in variables
+            var planId = $(this).data("planid");
+            var locationId = $(this).data("locationid");
+
+            // Define the formdata object with default values
+            formdata = {
+                plan_id: planId,
+                location_id: locationId,
+                latitude: 0,
+                longitude: 0
+            };
+
+            // Get the current location
+            navigator.geolocation.getCurrentPosition(function(position) {
+                // Update latitude and longitude with current position
+                formdata.latitude = position.coords.latitude;
+                formdata.longitude = position.coords.longitude;
+
+                // Open camera modal
+                $('#cameraModal').modal('show');
+
+                // Get camera stream and display in modal
+                navigator.mediaDevices.getUserMedia({
+                        video: true
+                    })
+                    .then(function(stream) {
+                        var video = document.getElementById('cameraView');
+                        video.srcObject = stream;
+                        video.play();
+                    })
+                    .catch(function(err) {
+                        if (err.name === 'NotAllowedError') {
+                            alert("You have denied permission to access the camera. Please grant permission to proceed.");
+                        } else {
+                            console.log("An error occurred: " + err);
+                        }
+                    });
+            });
         });
-    });
 
-    // Event listener for capture button click
-    $('#captureBtn').on('click', function() {
-        var video = document.getElementById('cameraView');
-        var canvas = document.createElement('canvas');
-        var context = canvas.getContext('2d');
+        // Event listener for capture button click
+        $('#captureBtn').on('click', function() {
+            var video = document.getElementById('cameraView');
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
 
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        var imageData = canvas.toDataURL('image/jpeg');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            var imageData = canvas.toDataURL('image/jpeg');
 
-        // Close camera stream
-        video.srcObject.getTracks().forEach(function(track) {
-            track.stop();
-        });
+            // Close camera stream
+            stopCameraStream();
 
-        // Close camera modal
-        $('#cameraModal').modal('hide');
+            // Close camera modal
+            $('#cameraModal').modal('hide');
 
-        // Append image data to formdata
-        formdata.imageData = imageData;
+            // Append image data to formdata
+            formdata.imageData = imageData;
 
-        // Send AJAX request
-        $.ajax({
-            url: "<?php echo base_url() . "app-call-submit"; ?>",
-            type: "post",
-            data: formdata,
-            beforeSend: function() {
-                // Disable submit button and show spinner
-                $(".callbtn").prop("disabled", true);
-                $("#spinner").removeClass("d-none");
-                $("#error").addClass("d-none");
-            },
-            success: function(res) {
-                let obj = JSON.parse(res);
-                if (obj.error) {
-                    $("#error").html(obj.error);
-                    $("#error").removeClass("d-none");
-                    $("#spinner").addClass("d-none");
-                    toastr.error("Please check errors list!", "Error");
+            // Send AJAX request
+            $.ajax({
+                url: "<?php echo base_url() . "app-call-submit"; ?>",
+                type: "post",
+                data: formdata,
+                beforeSend: function() {
+                    // Disable submit button and show spinner
+                    $(".callbtn").prop("disabled", true);
+                    $("#spinner").removeClass("d-none");
+                    $("#error").addClass("d-none");
+                },
+                success: function(res) {
+                    let obj = JSON.parse(res);
+                    if (obj.error) {
+                        $("#error").html(obj.error);
+                        $("#error").removeClass("d-none");
+                        $("#spinner").addClass("d-none");
+                        toastr.error("Please check errors list!", "Error");
+                        $(window).scrollTop(0);
+                    } else if (obj.success) {
+                        $("#spinner").addClass("d-none");
+                        toastr.success("Success!", "Call Successfully Added!");
+                    } else {
+                        $("#spinner").addClass("d-none");
+                        $(".callbtn").prop("disabled", false);
+                        toastr.error("Something bad happened!", "Error");
+                        $(window).scrollTop(0);
+                    }
+
+                    $(".callbtn").prop("disabled", false);
+                },
+                error: function(error) {
+                    toastr.error("Error while sending request to server!", "Error");
                     $(window).scrollTop(0);
-                } else if (obj.success) {
-                    $("#spinner").addClass("d-none");
-                    toastr.success("Success!", "Call Successfully Added!");
-                } else {
                     $("#spinner").addClass("d-none");
                     $(".callbtn").prop("disabled", false);
-                    toastr.error("Something bad happened!", "Error");
-                    $(window).scrollTop(0);
                 }
+            });
+        });
 
-                $(".callbtn").prop("disabled", false);
-            },
-            error: function(error) {
-                toastr.error("Error while sending request to server!", "Error");
-                $(window).scrollTop(0);
-                $("#spinner").addClass("d-none");
-                $(".callbtn").prop("disabled", false);
-            }
+        // Listen for modal close event
+        $('#cameraModal').on('hidden.bs.modal', function() {
+            // Call the function to stop the camera stream
+            stopCameraStream();
         });
     });
 </script>
@@ -420,12 +448,12 @@
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
-    
+
     $("#historytab").on("click", function() {
         $.ajax({
             url: "<?php echo base_url() . "app-get-my-history"; ?>",
             beforeSend: function() {
-					$("#spinner").removeClass("d-none");
+                $("#spinner").removeClass("d-none");
             },
             success: function(res) {
                 $("#spinner").addClass("d-none");
@@ -435,9 +463,9 @@
                 obj.map(row => {
                     html += "<tr>"
                     html += "<td>" + formatDate(row.created_at) + "</td>"
-                    html += "<td>"+ capitalizeFirstLetter(row.doctor_name) + "</td>"
-                    html += "<td>" + capitalizeFirstLetter(row.city_name) +"</td>"
-                    html += "<td>" + capitalizeFirstLetter(row.area) +"</td>"
+                    html += "<td>" + capitalizeFirstLetter(row.doctor_name) + "</td>"
+                    html += "<td>" + capitalizeFirstLetter(row.city_name) + "</td>"
+                    html += "<td>" + capitalizeFirstLetter(row.area) + "</td>"
 
                     html += "<td>"
                     const parsedChemists = JSON.parse(row.chemists);
@@ -447,7 +475,7 @@
                     html += "</td>"
 
                     html += "<td>"
-                    const parsedSpecialities  = JSON.parse(row.specialities);
+                    const parsedSpecialities = JSON.parse(row.specialities);
                     parsedSpecialities.map(special => {
                         html += capitalizeFirstLetter(special) + '<br>';
                     })

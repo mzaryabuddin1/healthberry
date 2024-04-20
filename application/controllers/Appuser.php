@@ -19,14 +19,14 @@ class Appuser extends CI_Controller
   {
     $this->load->view("app_login_view");
   }
-  
+
   public function checksession()
-	{
-		if ( !isset($_SESSION['app_user_id']) || empty($_SESSION['app_user_id']) ) {
-			header("Location: " . base_url() . 'login-app-user?err=Please Login First');
-			exit;
-		}
-	}
+  {
+    if (!isset($_SESSION['app_user_id']) || empty($_SESSION['app_user_id'])) {
+      header("Location: " . base_url() . 'login-app-user?err=Please Login First');
+      exit;
+    }
+  }
 
   public function login_submit()
   {
@@ -73,8 +73,8 @@ class Appuser extends CI_Controller
   public function logout()
   {
     unset($_SESSION['app_user_id']);
-		session_destroy();
-		header("Location: " . base_url() . 'login-app-user');
+    session_destroy();
+    header("Location: " . base_url() . 'login-app-user');
   }
 
   public function dashboard()
@@ -94,10 +94,37 @@ class Appuser extends CI_Controller
     $this->load->view("app_view_doctor_location", $this->data);
   }
 
-  public function get_my_history(){
+  public function get_my_history()
+  {
     $this->checksession();
     $this->data['history'] = $this->Appuser_model->get_history($_SESSION['app_user_id']);
     echo json_encode($this->data['history']);
+  }
+
+  public function check_current_location($dbLat, $dbLng, $phpLat, $phpLng, $radius)
+  {
+    // Earth radius in meters
+    $earthRadius = 6371000;
+
+    // Convert latitude and longitude from degrees to radians
+    $dbLatRad = deg2rad($dbLat);
+    $dbLngRad = deg2rad($dbLng);
+    $phpLatRad = deg2rad($phpLat);
+    $phpLngRad = deg2rad($phpLng);
+
+    // Calculate the distance between two points using Haversine formula
+    $deltaLat = $phpLatRad - $dbLatRad;
+    $deltaLng = $phpLngRad - $dbLngRad;
+    $a = sin($deltaLat / 2) * sin($deltaLat / 2) + cos($dbLatRad) * cos($phpLatRad) * sin($deltaLng / 2) * sin($deltaLng / 2);
+    $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+    $distance = $earthRadius * $c;
+
+    // Check if the distance is within the radius
+    if ($distance <= $radius) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public function call_submit()
@@ -110,13 +137,45 @@ class Appuser extends CI_Controller
     $this->form_validation->set_rules('imageData', 'Image', 'required');
 
     if ($this->form_validation->run() == false) {
-			$errors = array('error' => validation_errors());
-			print_r(json_encode($errors));
-			exit;
-		}
+      $errors = array('error' => validation_errors());
+      print_r(json_encode($errors));
+      exit;
+    }
+
+    $information = $this->security->xss_clean($this->input->post());
+
+    // GET PLAN ID CHECK RADIUS
+    $location_lat_lng = $this->Appuser_model->get_location_info_by_id($information['location_id']);
+    if (!$location_lat_lng) {
+      $errors = array('error' => 'Location is not available');
+      print_r(json_encode($errors));
+      exit;
+    }
+
+
+
+    $is_within_radius = $this->check_current_location(
+      $location_lat_lng['latitude'],
+      $location_lat_lng['longitude'],
+      $information['latitude'],
+      $information['longitude'],
+      100 // Adjust the radius as needed
+    );
+
+    if(!$is_within_radius){
+      $errors = array('error' => 'You are not in area please close to it.');
+      print_r(json_encode($errors));
+      exit;
+    }
 
     // Decode base64-encoded image data
-    $decodedImageData = base64_decode(str_replace('data:image/jpeg;base64,', '', $this->input->post("imageData")));
+    $imageData = $this->input->post("imageData");
+    $decodedImageData = base64_decode(str_replace('data:image/jpeg;base64,', '', $imageData));
+    if (empty($imageData) || $imageData == 'data:,') {
+      $errors = array('error' => 'No image  received');
+      print_r(json_encode($errors));
+      exit;
+    }
     // Generate a unique filename
     $filename = uniqid() . '.jpg';
     // Specify the path to save the image
@@ -124,27 +183,24 @@ class Appuser extends CI_Controller
     // Save the image to file
     file_put_contents($pathToSave, $decodedImageData);
 
-    $information = $this->security->xss_clean($this->input->post());
     $this->data['app_user_id'] = $_SESSION['app_user_id'];
-		$this->data['location_id'] = $information['location_id'];
-		$this->data['plan_id'] = $information['plan_id'] ? $information['plan_id'] : null;
+    $this->data['location_id'] = $information['location_id'];
+    $this->data['plan_id'] = $information['plan_id'] ? $information['plan_id'] : null;
     $this->data['latitude'] = $information['latitude'];
     $this->data['longitude'] = $information['longitude'];
-    $this->data['evidance_picture'] = base_url() . "uploads/" .$filename;
+    $this->data['evidance_picture'] = base_url() . "uploads/" . $filename;
     $this->data['created_at'] = $this->__currentdatetime;
 
     $result = $this->Appuser_model->save_call($this->data);
 
-    if($result){
+    if ($result) {
       $success = array('success' => 1);
       print_r(json_encode($success));
       exit;
-    }else{
+    } else {
       $errors = array('error' => 'Unable to save');
       print_r(json_encode($errors));
       exit;
     }
-   
   }
-  
 }

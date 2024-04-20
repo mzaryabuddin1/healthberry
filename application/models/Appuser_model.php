@@ -56,6 +56,7 @@ class Appuser_model extends CI_Model {
       locations.timings,
       locations.latitude,
       locations.longitude,
+      cities.city_name
       ',
       )
       ->from('weekly_plan')
@@ -63,6 +64,7 @@ class Appuser_model extends CI_Model {
       ->where('locations.status', 1)
       ->join('app_users', 'app_users.id = weekly_plan.app_user_id', 'left')
       ->join('locations', 'locations.id = weekly_plan.location_id', 'left')
+      ->join('cities', 'cities.id = locations.city', 'left')
       ->get()
       ->result_array());
   }
@@ -115,6 +117,16 @@ class Appuser_model extends CI_Model {
       ->join('locations', 'locations.id = weekly_plan.location_id', 'left')
       ->get()
       ->result_array());
+  }
+
+  public function get_location_info_by_id($params)
+  {
+      return ($this->db->select('locations.*')
+      ->from('locations')
+      ->where('locations.id', $params)
+      ->where('locations.status', 1)
+      ->get()
+      ->row_array());
   }
 
   public function save_call($params)
