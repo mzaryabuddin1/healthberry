@@ -69,6 +69,20 @@ class Appuser_model extends CI_Model {
       ->result_array());
   }
 
+  public function get_cities(){
+    return ($this->db->select('cities.*')
+      ->from('cities')
+      ->get()
+      ->result_array());
+  }
+  public function get_active_products(){
+    return ($this->db->select('products.*')
+    ->from('products')
+    ->where('products.status', 1)
+    ->get()
+    ->result_array());
+  }
+
   public function get_history($params)
   {
       return ($this->db->select('

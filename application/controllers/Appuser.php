@@ -81,6 +81,8 @@ class Appuser extends CI_Controller
   {
     $this->checksession();
     $this->data['plan'] = $this->Appuser_model->get_plan($_SESSION['app_user_id']);
+    $this->data['cities'] = $this->Appuser_model->get_cities();
+    $this->data['products'] = $this->Appuser_model->get_active_products();
     // $this->data['history'] = $this->Appuser_model->get_history($_SESSION['app_user_id']);
     $this->load->view("app_dashboard_view", $this->data);
   }

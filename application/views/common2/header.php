@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="<?= base_url() ?>mazer/assets/css/app.css">
     <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="<?= base_url() ?>mazer/assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="<?= base_url() ?>mazer/assets/vendors/choices.js/choices.min.css" />
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

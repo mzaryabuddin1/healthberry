@@ -23,7 +23,9 @@
 <script src="<?= base_url() ?>mazer/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="<?= base_url() ?>mazer/assets/js/bootstrap.bundle.min.js"></script>
 <script src="<?= base_url() ?>mazer/assets/vendors/fontawesome/all.min.js"></script>
+<script src="<?= base_url() ?>mazer/assets/vendors/choices.js/choices.min.js"></script>
 <script src="<?= base_url() ?>mazer/assets/js/main.js"></script>
+
 
 <script>
     function updateClock() {
