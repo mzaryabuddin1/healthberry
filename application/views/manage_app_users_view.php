@@ -1,7 +1,7 @@
 <?php
 
-$pagetab = "users";
-$pagename = "manage_users";
+$pagetab = "app_users";
+$pagename = "manage_app_users";
 
 ?>
 
@@ -19,11 +19,11 @@ $pagename = "manage_users";
         <div class="card mt-3">
             <div class="card-header d-flex justify-content-start">
                 <div class="col-6">
-                    <h6><i class="fa fa-table" aria-hidden="true"></i> Users</h6>
+                    <h6><i class="fa fa-table" aria-hidden="true"></i> App Users</h6>
 
                 </div>
                 <div class="col-6" style="text-align: right;">
-                    <a href="<?php echo base_url() ?>add-user" class="btn btn-primary">Add</a>
+                    <a href="<?php echo base_url() ?>add-app-user" class="btn btn-primary">Add</a>
 
                 </div>
             </div>
@@ -35,9 +35,9 @@ $pagename = "manage_users";
                             <table class="table table-striped" id="datatable">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
+                                    <th>User Name</th>
+                                    <th>Profile</th>
+                                    <th>Created</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -45,11 +45,11 @@ $pagename = "manage_users";
                             <tbody>
                                 <?php foreach ($data as $row) : ?>
                                     <tr>
-                                        <td><?= $row['name'] ?></td>
-                                        <td><?= $row['email'] ?></td>
-                                        <td><?= $row['roles'] ?></td>
+                                        <td><?= $row['username'] ?></td>
+                                        <td><img src="<?= $row['profile_picture'] ?>" alt="" style="width:100px;height:100px"></td>
+                                        <td><?= $row['created_at'] ?></td>
                                         <td><?= $row['status'] ? 'Active' : 'Inactive' ?></td>
-                                        <td><a href="<?php echo base_url()?>edit-user/<?= $row['id'] ?>" class="btn btn-primary">Edit</a></td>
+                                        <td><a href="<?php echo base_url()?>edit-app-user/<?= $row['id'] ?>" class="btn btn-primary">Edit</a></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>

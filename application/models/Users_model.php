@@ -33,9 +33,43 @@ class Users_model extends CI_Model {
   {
     return $this->db->select("*")->from('users')->get()->result_array();
   }
-
+  public function get_app_users()
+  {
+    return $this->db->select("*")->from('app_users')->get()->result_array();
+  }
+  
   // ------------------------------------------------------------------------
+  public function save_data($name, $email, $password, $roles, $created_at,$status)
+  {
+    $data = array(
+      'name' => $name,
+      'email' => $email,
+      'password' => $password,
+      'roles' => $roles,
+      'created_at' => $created_at,
+      'status' => $status
+    );
 
+    return $this->db->insert('users', $data);
+  }
+  public function get_user_row($id)
+  {
+    return $this->db->select("*")->from('users')->where("id", $id)->get()->row_array();
+  }
+  public function update_data($name, $email, $password, $roles,$status,$id)
+  {
+    $data = array(
+      'name' => $name,
+      'email' => $email,
+      'roles' => $roles,
+      'status' => $status
+    );
+    if($password!==''){
+      $data['password']=md5($password);
+    }
+    $this->db->where('id', $id);
+    return $this->db->update('users', $data);
+  }
 }
 
 /* End of file Users_model.php */

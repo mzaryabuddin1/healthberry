@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  *
- * Model Locations_model
+ * Model Specialities_model
  *
  * This Model for ...
  * 
@@ -16,7 +16,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  *
  */
 
-class Locations_model extends CI_Model {
+class Specialities_model extends CI_Model {
 
   // ------------------------------------------------------------------------
 
@@ -31,15 +31,12 @@ class Locations_model extends CI_Model {
   // ------------------------------------------------------------------------
   public function get_locations()
   {
-    return $this->db->select("*")->from('locations')->get()->result_array();
+    return $this->db->select("*")->from('specialities')->get()->result_array();
   }
-  public function insert_location($data) {
-    // Insert data into 'locations' table
-    return $this->db->insert('locations', $data);
-}
+
   // ------------------------------------------------------------------------
 
 }
 
-/* End of file Locations_model.php */
-/* Location: ./application/models/Locations_model.php */
+/* End of file Specialities_model.php */
+/* Location: ./application/models/Specialities_model.php */
