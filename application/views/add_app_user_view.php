@@ -1,7 +1,7 @@
 <?php
 
 $pagetab = "users";
-$pagename = "manage_users";
+$pagename = "manage_app_users";
 
 ?>
 
@@ -19,7 +19,7 @@ $pagename = "manage_users";
         <div class="card mt-3">
             <div class="card-header d-flex justify-content-start">
                 <div class="col-6">
-                    <h6><i class="fa fa-table" aria-hidden="true"></i> Add User</h6>
+                    <h6><i class="fa fa-table" aria-hidden="true"></i> Add Feild User</h6>
 
                 </div>
 
@@ -31,44 +31,20 @@ $pagename = "manage_users";
                     <form class="form form-horizontal" id="formSubmit">
                         <div class="form-body">
                             <div class="row">
-
                                 <div class="col-md-6 form-group">
-                                    <label>User Name</label>
-                                    <input type="text" class="form-control" name="name" placeholder="User Name">
-                                </div>
-
-                                <div class="col-md-6 form-group">
-                                    <label>Email</label>
-                                    <input type="text" class="form-control" name="email" placeholder="Email">
+                                    <label>Username</label>
+                                    <input type="text" class="form-control" name="username" placeholder="Username" required>
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label>Password</label>
-                                    <input type="password" class="form-control" name="password" placeholder="Password">
-                                </div>
-                               
-                                <div class="col-md-6 form-group">
-                                    <label>Confirm Password</label>
-                                    <input type="password" class="form-control" name="password" placeholder="Password">
-                                </div>
-
-                                <div class="col-md-6 form-group">
-                                    <label>role</label>
-                                    <select name="roles" id="roles" class="form-control" required>
-                                        <option value="" disabled>Selecte role</option>
-                                        <option value="user">User</option>
-                                        <option value="admin">admin</option>
-                                    </select>
+                                    <input type="password" class="form-control" name="password" placeholder="Password" required>
                                 </div>
                                 <div class="col-md-6 form-group">
-                                    <label>Status</label>
-                                    <select name="status" id="status" class="form-control" required>
-                                        <option value="" disabled>Selecte Status</option>
-                                        <option value="1">Active</option>
-                                        <option value="0">In Active</option>
-                                    </select>
+                                    <label>Profile Picture</label>
+                                    <input type="file" class="form-control" name="file_name" >
                                 </div>
                                 <div class="col-sm-12 d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
+                                    <button type="submit" class="btn btn-primary me-1 mb-1">Create</button>
                                 </div>
                             </div>
                         </div>
@@ -95,14 +71,18 @@ $pagename = "manage_users";
 
             // Disable submit button to prevent multiple submissions
             $('#formSubmit button[type="submit"]').prop('disabled', true);
+            var formdata = new FormData(this);
 
-            var formData = $(this).serialize();
+            // var formData = $(this).serialize();
 
             $.ajax({
                 type: "POST",
-                url: "<?php echo base_url(); ?>user-submit",
-                data: formData,
+                url: "<?php echo base_url(); ?>app-user-submit",
+                data: formdata,
                 dataType: "json",
+                processData: false, // tell jQuery not to process the data
+                contentType: false, // tell jQuery not to set contentType
+                cache: false,
                 beforeSend: function() {
                     $('#formSubmit button[type="submit"]').prop('disabled', true);
                 },

@@ -31,7 +31,12 @@ class Locations_model extends CI_Model {
   // ------------------------------------------------------------------------
   public function get_locations()
   {
-    return $this->db->select("*")->from('locations')->get()->result_array();
+    // return $this->db->select("*")->from('locations')->get()->result_array();
+    return $this->db->select('locations.*, cities.city_name')
+         ->from('locations')
+         ->join('cities', 'cities.id = locations.city')
+         ->get()
+         ->result_array();
   }
   public function insert_location($data) {
     // Insert data into 'locations' table

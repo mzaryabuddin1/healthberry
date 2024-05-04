@@ -26,6 +26,9 @@ $route['user-submit'] = "Users/user_submit";
 $route['edit-user/(:any)'] = "Users/edit_user/$1";
 $route['user-update'] = "Users/user_update";
 $route['manage-app-users'] = "Users/app_users";
+$route['add-app-user'] = "Users/add_app_user";
+$route['app-user-submit'] = "Users/app_user_submit";
+
 
 //locations
 $route['manage-locations'] = "Locations";

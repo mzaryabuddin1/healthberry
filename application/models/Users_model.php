@@ -52,6 +52,18 @@ class Users_model extends CI_Model {
 
     return $this->db->insert('users', $data);
   }
+  public function save_data_app_user($username, $password, $created_at, $file_url)
+  {
+    $data = array(
+      'username' => $username,
+      'password' => $password,
+      'profile_picture' => $file_url,
+      'created_at' => $created_at,
+      "created_by" => $_SESSION['user_id']
+    );
+
+    return $this->db->insert('app_users', $data);
+  }
   public function get_user_row($id)
   {
     return $this->db->select("*")->from('users')->where("id", $id)->get()->row_array();

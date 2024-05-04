@@ -55,7 +55,7 @@ $pagename = "manage_locations";
                                         <tr>
                                             <td><?= $row['doctor_name'] ?></td>
                                             <td><?= $row['area'] ?></td>
-                                            <td><?= $row['city'] ?></td>
+                                            <td><?= $row['city_name'] ?></td>
                                             <td><?= $row['chemists'] ?></td>
                                             <td><?= $row['specialities'] ?></td>
                                             <td><?= $row['timings'] ?></td>
