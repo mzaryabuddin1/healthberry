@@ -21,6 +21,33 @@ $route['manage-doctor'] = "Doctor";
 
 // USERS
 $route['manage-users'] = "Users";
+$route['add-user'] = "Users/add";
+$route['user-submit'] = "Users/user_submit";
+$route['edit-user/(:any)'] = "Users/edit_user/$1";
+$route['user-update'] = "Users/user_update";
+$route['manage-app-users'] = "Users/app_users";
+$route['add-app-user'] = "Users/add_app_user";
+$route['app-user-submit'] = "Users/app_user_submit";
+
+
+//locations
+$route['manage-locations'] = "Locations";
+$route['add-location'] = "Locations/add";
+$route['location-submit'] = "Locations/location_submit";
+
+
+
+
+//products
+$route['manage-products'] = "Products";
+$route['add-product'] = "Products/add";
+$route['product-submit'] = "Products/product_submit";
+$route['edit-products/(:any)'] = "Products/edit_product/$1";
+$route['product-update'] = "Products/product_update";
+
+
+//specialities
+$route['manage-specialities'] = "Specialities";
 
 // APP USER
 $route['login-app-user'] = "Appuser";

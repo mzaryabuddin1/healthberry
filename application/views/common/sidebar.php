@@ -231,6 +231,13 @@
 												</li>
 											</ul>
 										</li>
+										<li class="nav-item">
+											<ul class="nav flex-column">
+												<li class="nav-item <?= $pagename == "manage_app_users" ? 'active' : "" ?>">
+													<a class="nav-link" href="<?= base_url() . 'manage-app-users' ?>"><span class="nav-link-text">Manage App User</span></a>
+												</li>
+											</ul>
+										</li>
 									</ul>
 								</li>
 							</ul>
@@ -263,7 +270,32 @@
 									<li class="nav-item">
 										<ul class="nav flex-column">
 											<li class="nav-item">
-												<a class="nav-link" href="#"><span class="nav-link-text">Chats</span></a>
+												<a class="nav-link" href="<?= base_url() . 'manage-locations' ?>"><span class="nav-link-text">Manage</span></a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_products">
+									<span class="nav-icon-wrap">
+										<span class="svg-icon">
+											<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-dots" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+												<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+												<path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4" />
+												<line x1="12" y1="11" x2="12" y2="11.01" />
+												<line x1="8" y1="11" x2="8" y2="11.01" />
+												<line x1="16" y1="11" x2="16" y2="11.01" />
+											</svg>
+										</span>
+									</span>
+									<span class="nav-link-text">products</span>
+								</a>
+								<ul id="dash_products" class="nav flex-column collapse  nav-children">
+									<li class="nav-item">
+										<ul class="nav flex-column">
+											<li class="nav-item">
+												<a class="nav-link" href="<?= base_url() . 'manage-products' ?>"><span class="nav-link-text">Manage</span></a>
 											</li>
 										</ul>
 									</li>
