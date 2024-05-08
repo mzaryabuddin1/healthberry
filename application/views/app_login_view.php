@@ -19,12 +19,13 @@
         <div class="container d-block">
             <!-- <a href="index.html"><i class="bi bi-chevron-left"></i></a> -->
             <a class="navbar-brand ms-4" href="#">
-                <img src="<?= base_url() ?>mazer/assets/images/logo/logo.png">
+                <!-- <img width="100" src="<?= base_url() ?>mazer/assets/images/logo/logo.jpeg"> -->
+                <h3 class="text-success">Health Berry</h3>
             </a>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container mt-4">
         <!-- Basic Vertical form layout section start -->
         <section id="basic-vertical-layouts">
             <div class="row match-height">

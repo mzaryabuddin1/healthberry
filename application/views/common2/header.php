@@ -22,11 +22,12 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-light">
+    <nav class="navbar navbar-light" style="z-index: -1;">
         <div class="container d-block">
             <!-- <a href="index.html"><i class="bi bi-chevron-left"></i></a> -->
             <a class="navbar-brand ms-4" href="#">
-                <img src="<?= base_url() ?>mazer/assets/images/logo/logo.png">
+                <!-- <img src="<?= base_url() ?>mazer/assets/images/logo/logo.png"> -->
+                <h3 class="text-success">Health Berry</h3>
             </a>
         </div>
     </nav>
