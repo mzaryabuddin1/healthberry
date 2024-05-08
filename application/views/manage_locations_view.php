@@ -19,7 +19,7 @@ $pagename = "manage_locations";
         <div class="card mt-3">
             <div class="card-header d-flex justify-content-start">
                 <div class="col-6">
-                    <h6><i class="fa fa-table" aria-hidden="true"></i> Locations</h6>
+                    <h6><i class="fa fa-table" aria-hidden="true"></i> Doctors</h6>
 
                 </div>
                 <div class="col-6" style="text-align: right;">
@@ -53,12 +53,33 @@ $pagename = "manage_locations";
                                 <tbody>
                                     <?php foreach ($data as $row) : ?>
                                         <tr>
-                                            <td><?= $row['doctor_name'] ?></td>
-                                            <td><?= $row['area'] ?></td>
-                                            <td><?= $row['city_name'] ?></td>
-                                            <td><?= $row['chemists'] ?></td>
-                                            <td><?= $row['specialities'] ?></td>
-                                            <td><?= $row['timings'] ?></td>
+                                            <td><?= ucfirst($row['doctor_name']) ?></td>
+                                            <td><?= ucfirst($row['area']) ?></td>
+                                            <td><?= ucfirst($row['city_name']) ?></td>
+                                            <td>
+                                                <?php
+                                                    $parsed_chemist = json_decode($row['chemists']);
+                                                    foreach ($parsed_chemist as $var) {
+                                                        echo ucwords($var) . "<br>";
+                                                    }
+                                                ?>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                    $parsed_specs = json_decode($row['specialities']);
+                                                    foreach ($parsed_specs as $var) {
+                                                        echo ucwords($var) . "<br>";
+                                                    }
+                                                ?>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                    $parsed_timings = json_decode($row['timings'], true);
+                                                    foreach ($parsed_timings as $var) {
+                                                        echo $var["dayname"] . " - " . $var["from"] . " - " . $var["to"] . "<br>";
+                                                    }
+                                                ?>
+                                            </td>
                                             <td><?= $row['latitude'] ?></td>
                                             <td><?= $row['longitude'] ?></td>
                                             <td><?= ($row['is_approved'] == 1) ? 'approved' : 'Not approved' ?></td>

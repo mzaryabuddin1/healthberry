@@ -68,6 +68,10 @@ class Users_model extends CI_Model {
   {
     return $this->db->select("*")->from('users')->where("id", $id)->get()->row_array();
   }
+  public function get_app_user_row($id)
+  {
+    return $this->db->select("*")->from('app_users')->where("id", $id)->get()->row_array();
+  }
   public function update_data($name, $email, $password, $roles,$status,$id)
   {
     $data = array(
@@ -81,6 +85,11 @@ class Users_model extends CI_Model {
     }
     $this->db->where('id', $id);
     return $this->db->update('users', $data);
+  }
+  public function update_data_app_user($params)
+  {
+    $this->db->where('id', $params['id']);
+    return $this->db->update('app_users', $params);
   }
 }
 

@@ -15,6 +15,7 @@ class Users extends CI_Controller
         }
         $this->allowed_extensions = array('jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'docx', 'pdf', 'webp');
         $this->load->model('Users_model');
+        $this->__currentdatetime = date("Y-m-d H:i:s", time());
     }
 
     public function index()
@@ -134,6 +135,74 @@ class Users extends CI_Controller
         echo json_encode($response);
     }
 
+    public function edit_app_user_submit()
+    {
+
+        $this->load->library('upload');
+
+        $this->form_validation->set_rules('id', 'ID', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'trim');
+        $this->form_validation->set_rules('status', 'Status', 'trim|required');
+
+        // Run validation
+        if ($this->form_validation->run() == FALSE) {
+            // Validation failed
+            print_r(validation_errors());
+            $response['message'] = validation_errors();
+            $response['status'] = "0";
+        } else {
+            // Validation passed
+
+            $update['id'] = $this->input->post('id');
+            if($this->input->post('password')){
+                $update['password'] = md5($this->input->post('password'));
+            }
+            $update['updated_at'] = $this->__currentdatetime;
+            $update['updated_by'] = $_SESSION['user_id'];
+            $update['status'] = $this->input->post('status');
+
+            if ($_FILES["file_name"]["tmp_name"]) {
+                //VALIDATE EXTENSION
+                $ext = pathinfo($_FILES['file_name']['name'], PATHINFO_EXTENSION);
+                if (!in_array($ext, $this->allowed_extensions)) {
+                    $errors = array('error' => '<p>Incorrect file format!</p>');
+                    print_r(json_encode($errors));
+                    exit;
+                }
+                //VALIDATE FILE SIZE
+                $filesize = $_FILES["file_name"]["size"];
+                $maxsize = 5 * 1024 * 1024;
+                if ($filesize > $maxsize) {
+                    $errors = array('error' => '<p>File is too large to upload!</p>');
+                    print_r(json_encode($errors));
+                    exit;
+                }
+                $temp = explode(".", $_FILES["file_name"]["name"]);
+                $newfilename = round(microtime(true)) .  rand(111111, 999999) . '.' . end($temp);
+                $uploaddir = 'uploads/' . $newfilename;
+                if (!move_uploaded_file($_FILES['file_name']['tmp_name'], $uploaddir)) {
+                    $errors = array('error' => '<p>Error while uploading Size Chart!</p>');
+                    print_r(json_encode($errors));
+                    exit;
+                } else {
+                    $update['profile_picture'] = base_url().'uploads/'.$newfilename;
+                }
+            }
+
+            // Call model method to save the data
+            $result = $this->Users_model->update_data_app_user($update);
+
+            if ($result) {
+                $response['status'] = "1";
+                $response['message'] = "Form submitted successfully!";
+            } else {
+                $response['status'] = "0";
+                $response['message'] = "Failed to submit form!";
+            }
+        }
+        echo json_encode($response);
+    }
+
 
 
 
@@ -181,5 +250,15 @@ class Users extends CI_Controller
             exit;
         }
         $this->load->view('edit_users_view', $data);
+    }
+
+    public function edit_app_user($id)
+    {
+        $data['data'] = $this->Users_model->get_app_user_row($id);
+        if (empty($data['data'])) {
+            header("Location: " . base_url() . 'manage-app-users');
+            exit;
+        }
+        $this->load->view('edit_app_user_view', $data);
     }
 }

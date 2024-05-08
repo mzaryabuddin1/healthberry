@@ -26,8 +26,11 @@ $route['user-submit'] = "Users/user_submit";
 $route['edit-user/(:any)'] = "Users/edit_user/$1";
 $route['user-update'] = "Users/user_update";
 $route['manage-app-users'] = "Users/app_users";
+$route['edit-app-user/(:any)'] = "Users/edit_app_user/$1";
 $route['add-app-user'] = "Users/add_app_user";
 $route['app-user-submit'] = "Users/app_user_submit";
+
+$route['edit-app-user-submit'] = "Users/edit_app_user_submit";
 
 
 //locations
@@ -58,3 +61,9 @@ $route['app-view-doctor-location'] = "Appuser/doctor_location";
 $route['app-call-submit'] = "Appuser/call_submit";
 $route['app-get-my-history'] = "Appuser/get_my_history";
 $route['app-new-location-submit'] = "Appuser/new_location_submit";
+
+
+// Reports
+
+$route['report-doctors'] = "Report/doctors";
+$route['report-get-doctors'] = "Report/get_doctors";

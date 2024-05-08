@@ -51,12 +51,12 @@ $pagename = "manage_users";
                                     <input type="password" class="form-control" name="password" placeholder="Password">
                                 </div>
 
-                                <div class="col-md-6 form-group">
+                                <div class="col-md-6 form-group d-none">
                                     <label>role</label>
                                     <select name="roles" id="roles" class="form-control" required>
                                         <option value="" disabled>Selecte role</option>
                                         <option value="user">User</option>
-                                        <option value="admin">admin</option>
+                                        <option value="admin" selected>admin</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6 form-group">

@@ -35,7 +35,8 @@
 										<div class="col-lg-5 col-md-7 col-sm-10 mx-auto">
 											<div class="text-center mb-7">
 												<a class="navbar-brand me-0" href="index.html">
-													<img class="brand-img d-inline-block" src="<?= base_url() ?>theme/dist/img/roilogo.png" alt="brand">
+													<!-- <img class="brand-img d-inline-block" src="<?= base_url() ?>theme/dist/img/roilogo.png" alt="brand"> -->
+													<h3 class="text-success">Health berry</h3>
 												</a>
 											</div>
 											<div class="card card-lg card-border">

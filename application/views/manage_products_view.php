@@ -19,7 +19,7 @@ $pagename = "manage_products";
         <div class="card mt-3">
             <div class="card-header d-flex justify-content-start">
                 <div class="col-6">
-                    <h6><i class="fa fa-table" aria-hidden="true"></i> products</h6>
+                    <h6><i class="fa fa-table" aria-hidden="true"></i> Products</h6>
 
                 </div>
                 <div class="col-6" style="text-align: right;">
