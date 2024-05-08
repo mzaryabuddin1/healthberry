@@ -1,6 +1,6 @@
 <?php
 
-$pagetab = "app_users";
+$pagetab = "users";
 $pagename = "manage_app_users";
 
 ?>
@@ -19,7 +19,7 @@ $pagename = "manage_app_users";
         <div class="card mt-3">
             <div class="card-header d-flex justify-content-start">
                 <div class="col-6">
-                    <h6><i class="fa fa-table" aria-hidden="true"></i> App Users</h6>
+                    <h6><i class="fa fa-table" aria-hidden="true"></i>Field Users</h6>
 
                 </div>
                 <div class="col-6" style="text-align: right;">

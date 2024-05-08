@@ -230,7 +230,19 @@
                 // })
 
 
-                $('#captureBtn').on('click', function() {
+      
+
+
+
+
+            })
+
+
+            $('#captureBtn').on('click', function() {
+                    var formdata = {
+                        username: $("#username").val(),
+                        password: $("#password").val()
+                    };
                     var video = document.getElementById('cameraView');
                     var canvas = document.createElement('canvas');
                     var context = canvas.getContext('2d');
@@ -294,11 +306,6 @@
                         }
                     })
                 });
-
-
-
-
-            })
         })
     </script>
 

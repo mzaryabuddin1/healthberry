@@ -32,7 +32,7 @@ $pagename = "manage_locations";
         <div class="card mt-3">
             <div class="card-header d-flex justify-content-start">
                 <div class="col-6">
-                    <h6><i class="fa fa-table" aria-hidden="true"></i> Locations</h6>
+                    <h6><i class="fa fa-table" aria-hidden="true"></i> Add Doctors</h6>
 
                 </div>
                 <div class="col-6" style="text-align: right;">
@@ -110,42 +110,14 @@ $pagename = "manage_locations";
                                                 </div>
                                             </div>
                                             <div id="timings-more-input">
-                                                <!-- <div class="row mt-2">
-                                                                                        <div class="col-4">
-                                                                                            <select name="days[]" class="form-control" required>
-                                                                                                <option value="Monday">Mon</option>
-                                                                                                <option value="Tuesday">Tue</option>
-                                                                                                <option value="Wednesday">Wed</option>
-                                                                                                <option value="Thursday">Thu</option>
-                                                                                                <option value="Friday">Fri</option>
-                                                                                                <option value="Saturday">Sat</option>
-                                                                                                <option value="Sunday">Sun</option>
-                                                                                            </select>
-                                                                                        </div>
-                                                                                        <div class="col-4">
-                                                                                            <div class="input-group">
-                                                                                                <input type="time" style="padding-left: 5px !important;" class="form-control" placeholder="Specialities" name="timings[]" aria-label="Recipient username" aria-describedby="button-addon2" required>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="col-4">
-                                                                                            <div class="input-group">
-                                                                                              
-                                                                                                <input type="time" style="padding-left: 5px !important;" class="form-control" placeholder="Specialities" name="timings[]" aria-label="Recipient username" aria-describedby="button-addon2" required>
-                                                                                                <button class="btn btn-danger" type="button">-</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div> -->
+                                
                                             </div>
 
                                         </div>
 
                                     </div>
                                 </div>
-                                <!-- <div class="col-md-6 form-group">
-                                    <label>End time</label>
-
-                                    <input type="text" class="form-control" id="endTime" name="endTime" placeholder="End time" required>
-                                </div> -->
+                           
                                 <div class="col-md-6 form-group">
                                     <label>Latitude</label>
                                     <input type="text" class="form-control" id="latitude" name="latitude" placeholder="latitude" required>
