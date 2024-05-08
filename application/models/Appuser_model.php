@@ -161,9 +161,22 @@ class Appuser_model extends CI_Model {
       return ($this->db->insert('location_calls', $params));
   }
 
+  public function login_history($params)
+  {
+      return ($this->db->insert('login_history', $params));
+  }
+
   public function save_location($params)
   {
-      return ($this->db->insert('locations', $params));
+    $this->db->insert('locations', $params);
+    return $this->db->insert_id();
+  }
+
+  
+  public function save_weekly_plan($params)
+  {
+    $this->db->insert('weekly_plan', $params);
+    return $this->db->insert_id();
   }
 
 

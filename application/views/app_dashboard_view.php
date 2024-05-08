@@ -262,6 +262,17 @@
                                                                     </div>
                                                                     <div class="col-md-4 col-12">
                                                                         <div class="form-group has-icon-left">
+                                                                            <label for="password-id-icon">Patients Per Day</label>
+                                                                            <div class="position-relative">
+                                                                                <input type="number" id="patients_per_day" min="0" max="1000000000" class="form-control" placeholder="Patients Per Day" name="patients_per_day" required>
+                                                                                <div class="form-control-icon">
+                                                                                    <i class="bi bi-people"></i>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 col-12 d-none">
+                                                                        <div class="form-group has-icon-left">
                                                                             <label for="password-id-icon">Latitude</label>
                                                                             <div class="position-relative">
                                                                                 <input type="number" step="0.000000000000001" id="lat" min="-90" max="90" class="form-control latlng" placeholder="Latitude" name="latitude" required>
@@ -271,7 +282,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-4 col-12">
+                                                                    <div class="col-md-4 col-12 d-none">
                                                                         <div class="form-group has-icon-left">
                                                                             <label for="password-id-icon">Longitude</label>
                                                                             <div class="position-relative">
@@ -299,7 +310,7 @@
                                                         <table class="table table-bordered table-hover">
                                                             <thead class="bg-secondary text-light text-center">
                                                                 <th>DOCTOR</th>
-                                                                <th>APPROVAL</th>
+                                                                <th class="d-none">APPROVAL</th>
                                                                 <th>CITY</th>
                                                                 <th>AREA</th>
                                                                 <th>CHEMIST</th>
@@ -310,7 +321,6 @@
                                                                 <?php foreach ($locations as $row) : ?>
                                                                     <tr>
                                                                         <td><?= ucfirst($row['doctor_name']) ?></td>
-                                                                        <td><?= $row['is_approved'] ? "APPROVED" : "NOT APPROVED" ?></td>
                                                                         <td><?= ucfirst($row['city_name']) ?></td>
                                                                         <td><?= ucfirst($row['area']) ?></td>
                                                                         <td>
@@ -460,88 +470,6 @@
 </script>
 
 <script>
-    // $(".callbtn").on("click", function(e) {
-    //     // Store the value of data-planid in a variable
-    //     var planId = $(this).data("planid");
-
-    //     // Define the formdata object with default values
-    //     var formdata = {
-    //         plan_id: planId,
-    //         latitude: 0,
-    //         longitude: 0
-    //     };
-
-    //     // Get the current location
-    //     navigator.geolocation.getCurrentPosition(function(position) {
-    //         // Update latitude and longitude with current position
-    //         formdata.latitude = position.coords.latitude;
-    //         formdata.longitude = position.coords.longitude;
-
-    //         // Open camera modal
-    //         $('#cameraModal').modal('show');
-
-    //         // Get camera stream and display in modal
-    //         navigator.mediaDevices.getUserMedia({
-    //                 video: true
-    //             })
-    //             .then(function(stream) {
-    //                 var video = document.getElementById('cameraView');
-    //                 video.srcObject = stream;
-    //                 video.play();
-    //             })
-    //             .catch(function(err) {
-    //                 console.log("An error occurred: " + err);
-    //             });
-
-    //         // Handle capture button click
-    //         $('#captureBtn').on('click', function() {
-    //             var video = document.getElementById('cameraView');
-    //             var canvas = document.createElement('canvas');
-    //             var context = canvas.getContext('2d');
-
-    //             canvas.width = video.videoWidth;
-    //             canvas.height = video.videoHeight;
-    //             context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    //             var imageData = canvas.toDataURL('image/jpeg');
-
-    //             // Close camera stream
-    //             video.srcObject.getTracks().forEach(function(track) {
-    //                 track.stop();
-    //             });
-
-    //             // Close camera modal
-    //             $('#cameraModal').modal('hide');
-
-    //             // Append image data to formdata
-    //             formdata.imageData = imageData;
-
-    //             // Send AJAX request
-    //             $.ajax({
-    //                 url: "<?php echo base_url() . "app-call-submit"; ?>",
-    //                 type: "post",
-    //                 data: formdata,
-    //                 beforeSend: function() {
-    //                     // Disable submit button and show spinner
-    //                     $(".callbtn").prop("disabled", true);
-    //                     $("#spinner").removeClass("d-none");
-    //                     $("#error").addClass("d-none");
-    //                 },
-    //                 success: function(res) {
-    //                     // Handle success response
-    //                 },
-    //                 error: function(error) {
-    //                     // Handle error response
-    //                 },
-    //                 complete: function() {
-    //                     // Enable submit button and hide spinner
-    //                     $(".callbtn").prop("disabled", false);
-    //                     $("#spinner").addClass("d-none");
-    //                 }
-    //             });
-    //         });
-    //     });
-    // });
-
     $(document).ready(function() {
         let formdata;
 
@@ -674,8 +602,16 @@
     // Function to format date
     function formatDate(dateString) {
         var date = new Date(dateString);
-        return date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+        var day = ("0" + date.getDate()).slice(-2);
+        var month = ("0" + (date.getMonth() + 1)).slice(-2);
+        var year = date.getFullYear();
+        var hours = ("0" + date.getHours()).slice(-2);
+        var minutes = ("0" + date.getMinutes()).slice(-2);
+        var seconds = ("0" + date.getSeconds()).slice(-2);
+        
+        return day + '-' + month + '-' + year + ' ' + hours + ':' + minutes + ':' + seconds;
     }
+
 
     // Function to capitalize the first letter of a string
     function capitalizeFirstLetter(string) {

@@ -33,6 +33,7 @@ class Appuser extends CI_Controller
     //VALIDATE FORM
     $this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[3]');
     $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[5]');
+    $this->form_validation->set_rules('imageData', 'Image', 'required');
 
     if ($this->form_validation->run() == false) {
       $errors = array('error' => validation_errors());
@@ -42,6 +43,21 @@ class Appuser extends CI_Controller
 
 
     $information = $this->security->xss_clean($this->input->post());
+    // Decode base64-encoded image data
+    $imageData = $this->input->post("imageData");
+    $decodedImageData = base64_decode(str_replace('data:image/jpeg;base64,', '', $imageData));
+    if (empty($imageData) || $imageData == 'data:,') {
+      $errors = array('error' => 'No image  received');
+      print_r(json_encode($errors));
+      exit;
+    }
+    // Generate a unique filename
+    $filename = uniqid() . '.jpg';
+    // Specify the path to save the image
+    $pathToSave = FCPATH . 'uploads/' . $filename;
+    // Save the image to file
+    file_put_contents($pathToSave, $decodedImageData);
+
     $this->data['username'] = $information['username'];
     $this->data['password'] = md5($information['password']);
 
@@ -58,6 +74,14 @@ class Appuser extends CI_Controller
       $_SESSION['app_user_id'] = $isAvailable[0]['id'];
       $_SESSION['app_user_profile_picture'] = $isAvailable[0]['profile_picture'];
       $_SESSION['app_user_username'] = $isAvailable[0]['username'];
+
+      // LOGIN HISTORY
+
+      $history['app_user_id'] = $isAvailable[0]['id'];
+      $history['picture'] = base_url() . "uploads/" . $filename;
+      $history['created_at'] =  $this->__currentdatetime;
+
+      $this->Appuser_model->login_history($history);
 
 
       $success = array('success' => 1);
@@ -233,6 +257,7 @@ class Appuser extends CI_Controller
     $this->form_validation->set_rules('days[]', 'Days', 'required|trim');
     $this->form_validation->set_rules('timings_from[]', 'Timing From', 'required|trim');
     $this->form_validation->set_rules('timings_to[]', 'Timing To', 'required|trim');
+    $this->form_validation->set_rules('patients_per_day', 'Patients Per Day', 'required|greater_than[0]|less_than[1000000000]');
 
     if ($this->form_validation->run() == false) {
       $errors = array('error' => validation_errors());
@@ -244,6 +269,7 @@ class Appuser extends CI_Controller
     $this->data['created_user'] = "appuser";
     $this->data['created_by'] = $_SESSION['app_user_id'];
     $this->data['doctor_name'] = $information['doctor_name'];
+    $this->data['patients_per_day'] = $information['patients_per_day'];
     $this->data['products'] = json_encode($information['products']);
     $this->data['latitude'] = $information['latitude'];
     $this->data['longitude'] = $information['longitude'];
@@ -263,10 +289,20 @@ class Appuser extends CI_Controller
       $i++;
     }
     $this->data['timings'] = json_encode($timings_arr);
-    $this->data['is_approved'] = 0;
+    $this->data['is_approved'] = 1;
     $this->data['created_at'] = $this->__currentdatetime;
 
     $result = $this->Appuser_model->save_location($this->data);
+
+    // PLAN IT NOW
+    $plan['app_user_id'] = $_SESSION['app_user_id'];
+    $plan['location_id'] = $result;
+    $plan['planned_day'] = date('l', time());
+    $plan['planned_time'] = date('h:i:s', time());
+    $plan['created_at'] = $this->__currentdatetime;
+    $plan['created_by'] = null;
+
+    $result = $this->Appuser_model->save_weekly_plan($plan);
 
     if ($result) {
       $success = array('success' => 1);
