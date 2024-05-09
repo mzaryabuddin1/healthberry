@@ -19,6 +19,12 @@ $route['dashboard'] = "Dashboard";
 // DOCTOR
 $route['manage-doctor'] = "Doctor";
 
+// WEEKLY PLANS
+$route['weekly-plan'] = "Doctor/weekly_plan";
+$route['search-plan'] = "Doctor/search_plan";
+$route['create-plan-submit'] = "Doctor/create_plan_submit";
+$route['remove-plan-submit'] = "Doctor/remove_plan_submit";
+
 // USERS
 $route['manage-users'] = "Users";
 $route['add-user'] = "Users/add";

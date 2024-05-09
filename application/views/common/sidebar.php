@@ -269,6 +269,13 @@
 											</li>
 										</ul>
 									</li>
+									<li class="nav-item">
+										<ul class="nav flex-column">
+											<li class="nav-item <?= $pagename == "weekly_plan" ? 'active' : "" ?>">
+												<a class="nav-link" href="<?= base_url() . 'weekly-plan' ?>"><span class="nav-link-text">Weekly Plan</span></a>
+											</li>
+										</ul>
+									</li>
 								</ul>
 							</li>
 							<li class="nav-item <?= $pagetab == "products" ? 'active' : "" ?>">
