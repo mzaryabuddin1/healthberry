@@ -23,6 +23,7 @@ $route['manage-doctor'] = "Doctor";
 $route['weekly-plan'] = "Doctor/weekly_plan";
 $route['search-plan'] = "Doctor/search_plan";
 $route['create-plan-submit'] = "Doctor/create_plan_submit";
+$route['edit-plan-submit'] = "Doctor/edit_plan_submit";
 $route['remove-plan-submit'] = "Doctor/remove_plan_submit";
 
 // USERS

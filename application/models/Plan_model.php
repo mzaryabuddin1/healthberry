@@ -72,6 +72,13 @@ class Plan_model extends CI_Model {
     return $this->db->insert('weekly_plan', $params);
   }
 
+  public function update_plan($params)
+  {
+    $this->db->where('id', $params['id']);
+    unset($params['id']);
+    return $this->db->update('weekly_plan', $params);
+  }
+
   public function remove_plan($params)
   {
     return $this->db->update('weekly_plan', ['status' => 0], ['id' => $params]);
