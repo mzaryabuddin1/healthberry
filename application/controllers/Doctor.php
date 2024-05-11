@@ -3,6 +3,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Doctor extends CI_Controller
 {
+
+  private $data;
+  private $__currentdatetime;
     
   public function __construct()
   {
@@ -10,6 +13,8 @@ class Doctor extends CI_Controller
     $this->checksession->validatesession();
     if($_SESSION['user_roles'] != 'admin'){ header("Location: " . base_url() . 'login?error=Unauthorized Access'); }
     $this->load->model('Plan_model');
+    date_default_timezone_set("Asia/Karachi");
+    $this->__currentdatetime = date("Y-m-d H:i:s", time());
   }
 
   public function index()
@@ -56,6 +61,40 @@ class Doctor extends CI_Controller
     $this->data['created_by'] = $_SESSION['user_id'];
 
     $result = $this->Plan_model->create_plan($this->data);
+
+    if ($result) {
+			$success = array('success' => 1);
+			print_r(json_encode($success));
+			exit;
+		} else {
+			$errors = array('error' => '<p>Error while saving record!.</p>');
+			print_r(json_encode($errors));
+			exit;
+		}
+
+  }
+
+  public function edit_plan_submit()
+  {
+		$this->form_validation->set_rules('planid', 'User', 'required|numeric');
+		$this->form_validation->set_rules('planned_day', 'Day', 'required|in_list[Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday]');
+		$this->form_validation->set_rules('planned_time', 'Time', 'required');
+
+		if ($this->form_validation->run() == false) {
+			$errors = array('error' => validation_errors());
+			print_r(json_encode($errors));
+			exit;
+		}
+
+		$information = $this->security->xss_clean($this->input->post());
+
+    $this->data['id'] = $information['planid'];
+    $this->data['planned_day'] = $information['planned_day'];
+    $this->data['planned_time'] = $information['planned_time'];
+    $this->data['updated_by'] = $_SESSION['user_id'];
+    $this->data['updated_at'] = $this->__currentdatetime;
+
+    $result = $this->Plan_model->update_plan($this->data);
 
     if ($result) {
 			$success = array('success' => 1);

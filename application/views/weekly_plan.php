@@ -131,53 +131,97 @@ $pagename = "weekly_plan";
     </div>
 
 
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-	aria-labelledby="staticBackdropLabel" aria-hidden="true">
-	<div class="modal-dialog modal-xl">
-		<form id="planadd">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="staticBackdropLabel">Create Plan</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<div class="alert alert-danger d-none" id="error3" role="alert"></div>
-					<div class="d-none form-group col-md-12">
-                        <input type="text" class="readonly" name="location_id" value="" id="locid" required>
-                        <input type="text" class="readonly" name="app_user_id" value="" id="app_userid" required>
-					</div>
-					<div class="form-group col-md-12">
-						<label class="form-label">Day <span class="text-danger">*</span></label>
-                        <select class="form-control" name="planned_day" id="planned_day" required>
-                            <option value="" selected disabled>Select</option>
-                            <option value="Monday">Monday</option>
-                            <option value="Tuesday">Tuesday</option>
-                            <option value="Wednesday">Wednesday</option>
-                            <option value="Thursday">Thursday</option>
-                            <option value="Friday">Friday</option>
-                            <option value="Saturday">Saturday</option>
-                            <option value="Sunday">Sunday</option>
-                        </select>
-					</div>
-					<div class="form-group col-md-12">
-						<label class="form-label">Time <span class="text-danger">*</span></label>
-                        <input type="time" name="planned_time" class="form-control" required>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <div class="text-center d-none" id="spinner">
-						<button class="btn btn-primary" type="button" disabled>
-							<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-							Creating Plan...
-						</button>
-					</div>
-					<button type="submit" class="btn btn-primary">Create</button>
-				</div>
-			</div>
-		</form>
-	</div>
-</div>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <form id="planadd">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Create Plan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger d-none" id="error3" role="alert"></div>
+                        <div class="d-none form-group col-md-12">
+                            <input type="text" class="readonly" name="location_id" value="" id="locid" required>
+                            <input type="text" class="readonly" name="app_user_id" value="" id="app_userid" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Day <span class="text-danger">*</span></label>
+                            <select class="form-control" name="planned_day" id="planned_day" required>
+                                <option value="" selected disabled>Select</option>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                                <option value="Sunday">Sunday</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Time <span class="text-danger">*</span></label>
+                            <input type="time" name="planned_time" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <div class="text-center d-none" id="spinner">
+                            <button class="btn btn-primary" type="button" disabled>
+                                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                                Creating Plan...
+                            </button>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <form id="planedit">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Edit Plan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger d-none" id="error4" role="alert"></div>
+                        <div class="d-none form-group col-md-12">
+                            <input type="text" class="readonly" name="planid" value="" id="planid" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Day <span class="text-danger">*</span></label>
+                            <select class="form-control" id="planday" name="planned_day" id="planned_day" required>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                                <option value="Sunday">Sunday</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Time <span class="text-danger">*</span></label>
+                            <input type="time" id="plantime" name="planned_time" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <div class="text-center d-none" id="spinner2">
+                            <button class="btn btn-primary" type="button" disabled>
+                                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                                Updating Plan...
+                            </button>
+                        </div>
+                        <button type="submit" class="btn btn-dark">Update</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
 
 
@@ -269,7 +313,7 @@ $pagename = "weekly_plan";
                         tbl2html += "<td>" + valueOfElement.planned_day + "</td>"
                         tbl2html += "<td>" + valueOfElement.planned_time + "</td>"
                         tbl2html += "<td><a href='https://www.google.com/maps?q="+ valueOfElement.latitude +","+ valueOfElement.longitude +"' target='_blank'><i class='fa fa-map-marker' aria-hidden='true'></i></a></td>"
-                        tbl2html += "<td><button class='btn btn-sm btn-danger rm-btn' data-planid='"+ valueOfElement.plan_id +"'>Remove</button></td>"
+                        tbl2html += "<td><div class='row'><button class='btn btn-sm btn-danger rm-btn col-8' data-planid='"+ valueOfElement.plan_id +"'>Remove</button> <button class='btn btn-sm btn-primary col-4 modalbtn2' data-planid='"+ valueOfElement.plan_id +"' data-planday='"+ valueOfElement.planned_day +"' data-plantime='"+ valueOfElement.planned_time +"' data-bs-toggle='modal' data-bs-target='#staticBackdrop2'><i class='fa fa-edit'></i></button></div></td>"
                         tbl2html += "</tr>"
 
                     });
@@ -288,6 +332,22 @@ $pagename = "weekly_plan";
 
                         $("#locid").val(locid);
                         $("#app_userid").val(app_userid);
+                    });
+
+                    $(".modalbtn2").on("click", function() {
+                        var planid = $(this).data('planid');
+                        var planday = $(this).data('planday');
+                        var plantime = $(this).data('plantime');
+
+                        $("#planid").val(planid);
+                        $("#plantime").val(plantime);
+
+                        $("#planday option").each(function() {
+                            if ($(this).val() == planday) {
+                                $(this).prop("selected", true);
+                            }
+                        });
+
                     });
 
                     $(".rm-btn").on("click", function() {
@@ -378,6 +438,51 @@ $pagename = "weekly_plan";
 			})
         })
 
+        $("#planedit").on("submit", function(e) {
+            e.preventDefault();
+			var formdata = new FormData(this);
+			$.ajax({
+				url: "<?= base_url() . "edit-plan-submit"; ?>",
+				type: "post",
+				data: formdata,
+				processData: false, // tell jQuery not to process the data
+				contentType: false, // tell jQuery not to set contentType
+				cache: false,
+				beforeSend: function () {
+					$(":submit").prop("disabled", true);
+					$(":submit").addClass("d-none");
+					$("#spinner2").removeClass("d-none");
+					$("#error4").addClass("d-none");
+				},
+				success: function (res) {
+					let obj = JSON.parse(res);
+                    if (obj.error) {
+						$("#error4").html(obj.error);
+						$("#error4").removeClass("d-none");
+						$("#spinner2").addClass("d-none");
+						$(":submit").removeClass("d-none");
+						$(window).scrollTop(0);
+					} else if (obj.success) {
+						$("#spinner2").addClass("d-none");
+						setTimeout(function () {
+							window.location.reload();
+						}, 1000);
+					} else {
+						$("#spinner2").addClass("d-none");
+						$(":submit").prop("disabled", false);
+						$(":submit").removeClass("d-none");
+						$(window).scrollTop(0);
+					}
+					$(":submit").prop("disabled", false);
+				},
+				error: function (error) {
+					$(window).scrollTop(0);
+					$("#spinner2").addClass("d-none");
+					$(":submit").prop("disabled", false);
+					$(":submit").removeClass("d-none");
+				}
+			})
+        })
         
 
 
