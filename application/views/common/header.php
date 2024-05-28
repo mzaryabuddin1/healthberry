@@ -18,7 +18,6 @@
 	<!-- Daterangepicker CSS -->
 	<link href="<?= base_url() ?>theme/vendors/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
 
-
 	<!-- CSS -->
 	<link href="<?= base_url() ?>theme/dist/css/style.css" rel="stylesheet" type="text/css">
 </head>
