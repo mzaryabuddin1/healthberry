@@ -75,6 +75,8 @@ class Dashboard_model extends CI_Model {
   {
     return $this->db->select('*')
     ->from('locations')
+    ->limit(100)
+    ->order_by('RAND()')
     ->get()
     ->result_array();
   }
