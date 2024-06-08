@@ -92,7 +92,7 @@ $pagename = "dashboard";
 
             <div class="card">
                 <div class="card-header">
-                    Overall Doctors
+                    100 Random Doctors
                 </div>
                 <div class="card-body">
                     <div class="row">
