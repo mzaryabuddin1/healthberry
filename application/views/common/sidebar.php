@@ -318,6 +318,20 @@
 											</li>
 										</ul>
 									</li>
+									<li class="nav-item">
+										<ul class="nav flex-column">
+											<li class="nav-item <?= $pagename == "report_calls" ? 'active' : "" ?>">
+												<a class="nav-link" href="<?= base_url() . 'report-calls' ?>"><span class="nav-link-text">Calls</span></a>
+											</li>
+										</ul>
+									</li>
+									<li class="nav-item">
+										<ul class="nav flex-column">
+											<li class="nav-item <?= $pagename == "dynamic_reports" ? 'active' : "" ?>">
+												<a class="nav-link" href="<?= base_url() . 'dynamic-report' ?>"><span class="nav-link-text">Dynamic Reports</span></a>
+											</li>
+										</ul>
+									</li>
 								</ul>
 							</li>
 						</ul>
