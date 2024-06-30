@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '68.178.145.9',
-	'username' => 'healthberry',
-	'password' => 'LRKBLO!VslN{',
-	'database' => 'healthberry',
+	'hostname' => '138.201.162.196',
+	'username' => 'vvehirec_healthberry',
+	'password' => 'K79Qt#8Bmj1A.g',
+	'database' => 'vvehirec_healthberry',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

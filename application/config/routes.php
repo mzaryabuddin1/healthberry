@@ -74,3 +74,7 @@ $route['app-new-location-submit'] = "Appuser/new_location_submit";
 
 $route['report-doctors'] = "Report/doctors";
 $route['report-get-doctors'] = "Report/get_doctors";
+$route['report-calls'] = "Report/calls";
+$route['report-calls-get'] = "Report/get_calls_report";
+$route['dynamic-report'] = "Report/dynamic_report";
+$route['dynamic-reports-get'] = "Report/get_dynamic_reports";
