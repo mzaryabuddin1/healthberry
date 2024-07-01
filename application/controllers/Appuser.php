@@ -30,68 +30,93 @@ class Appuser extends CI_Controller
 
   public function login_submit()
   {
-    //VALIDATE FORM
-    $this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[3]');
-    $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[5]');
-    $this->form_validation->set_rules('imageData', 'Image', 'required');
-
-    if ($this->form_validation->run() == false) {
-      $errors = array('error' => validation_errors());
-      print_r(json_encode($errors));
-      exit;
-    }
-
-
-    $information = $this->security->xss_clean($this->input->post());
-    // Decode base64-encoded image data
-    $imageData = $this->input->post("imageData");
-    $decodedImageData = base64_decode(str_replace('data:image/jpeg;base64,', '', $imageData));
-    if (empty($imageData) || $imageData == 'data:,') {
-      $errors = array('error' => 'No image  received');
-      print_r(json_encode($errors));
-      exit;
-    }
-    // Generate a unique filename
-    $filename = uniqid() . '.jpg';
-    // Specify the path to save the image
-    $pathToSave = FCPATH . 'uploads/' . $filename;
-    // Save the image to file
-    file_put_contents($pathToSave, $decodedImageData);
-
-    $this->data['username'] = $information['username'];
-    $this->data['password'] = md5($information['password']);
-
-    $isAvailable = $this->Appuser_model->login_submit($this->data);
-
-    if (sizeof($isAvailable) > 0) {
-      if (!$isAvailable[0]['status']) {
-        $errors = array('error' => '<p>Your account is blocked!.</p>');
-        print_r(json_encode($errors));
-        exit;
+      // Validate form
+      $this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[3]');
+      $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[5]');
+  
+      // Check if the file was uploaded
+      if (empty($_FILES['imageData']['name'])) {
+          $errors = array('error' => 'Image is required');
+          print_r(json_encode($errors));
+          exit;
       }
-
-
-      $_SESSION['app_user_id'] = $isAvailable[0]['id'];
-      $_SESSION['app_user_profile_picture'] = $isAvailable[0]['profile_picture'];
-      $_SESSION['app_user_username'] = $isAvailable[0]['username'];
-
-      // LOGIN HISTORY
-
-      $history['app_user_id'] = $isAvailable[0]['id'];
-      $history['picture'] = base_url() . "uploads/" . $filename;
-      $history['created_at'] =  $this->__currentdatetime;
-
-      $this->Appuser_model->login_history($history);
-
-
-      $success = array('success' => 1);
-      print_r(json_encode($success));
-      exit;
-    } else {
-      $errors = array('error' => '<p>Combination Does Not Exists<br>Please check username and password!.</p>');
-      print_r(json_encode($errors));
-      exit;
-    }
+  
+      if ($this->form_validation->run() == false) {
+          $errors = array('error' => validation_errors());
+          print_r(json_encode($errors));
+          exit;
+      }
+  
+      $information = $this->security->xss_clean($this->input->post());
+  
+      // Handle the uploaded file
+      $uploadPath = $_SERVER['DOCUMENT_ROOT'] . "/healthberry/uploads/";
+      $fileTmpPath = $_FILES['imageData']['tmp_name'];
+      $fileName = uniqid() . '_' . $_FILES['imageData']['name'];
+      $fileSize = $_FILES['imageData']['size'];
+      $fileType = $_FILES['imageData']['type'];
+      $fileNameCmps = explode(".", $fileName);
+      $fileExtension = strtolower(end($fileNameCmps));
+  
+      // Check if the directory exists and is writable
+      if (!is_dir($uploadPath)) {
+          $errors = array('error' => 'Upload directory does not exist: ' . $uploadPath);
+          print_r(json_encode($errors));
+          exit;
+      }
+      if (!is_writable($uploadPath)) {
+          $errors = array('error' => 'Upload directory is not writable: ' . $uploadPath);
+          print_r(json_encode($errors));
+          exit;
+      }
+  
+      // Allowed file extensions
+      $allowedfileExtensions = array('jpg', 'jpeg', 'png');
+      if (!in_array($fileExtension, $allowedfileExtensions)) {
+          $errors = array('error' => 'Upload failed. Allowed file types: ' . implode(',', $allowedfileExtensions));
+          print_r(json_encode($errors));
+          exit;
+      }
+  
+      // Move the file to the upload directory
+      $dest_path = $uploadPath . $fileName;
+      if (!move_uploaded_file($fileTmpPath, $dest_path)) {
+          $errors = array('error' => 'There was an error moving the uploaded file to the destination directory.');
+          print_r(json_encode($errors));
+          exit;
+      }
+  
+      $this->data['username'] = $information['username'];
+      $this->data['password'] = md5($information['password']);
+  
+      $isAvailable = $this->Appuser_model->login_submit($this->data);
+  
+      if (sizeof($isAvailable) > 0) {
+          if (!$isAvailable[0]['status']) {
+              $errors = array('error' => '<p>Your account is blocked!.</p>');
+              print_r(json_encode($errors));
+              exit;
+          }
+  
+          $_SESSION['app_user_id'] = $isAvailable[0]['id'];
+          $_SESSION['app_user_profile_picture'] = $isAvailable[0]['profile_picture'];
+          $_SESSION['app_user_username'] = $isAvailable[0]['username'];
+  
+          // LOGIN HISTORY
+          $history['app_user_id'] = $isAvailable[0]['id'];
+          $history['picture'] = base_url() . "uploads/" . $fileName;
+          $history['created_at'] = $this->__currentdatetime;
+  
+          $this->Appuser_model->login_history($history);
+  
+          $success = array('success' => 1);
+          print_r(json_encode($success));
+          exit;
+      } else {
+          $errors = array('error' => '<p>Combination Does Not Exist<br>Please check username and password!.</p>');
+          print_r(json_encode($errors));
+          exit;
+      }
   }
 
   public function logout()

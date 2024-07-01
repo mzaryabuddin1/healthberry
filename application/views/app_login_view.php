@@ -134,8 +134,6 @@
 
     <script>
         $(function() {
-
-
             // Function to stop the camera stream
             function stopCameraStream() {
                 var video = document.getElementById('cameraView');
@@ -159,11 +157,9 @@
 
             $("#regstr").on("submit", function(e) {
                 e.preventDefault();
-                // var formdata = new FormData(this);
-                var formdata = {
-                    username: $("#username").val(),
-                    password: $("#password").val()
-                };
+                var formdata = new FormData();
+                formdata.append('username', $("#username").val());
+                formdata.append('password', $("#password").val());
 
                 // Open camera modal
                 $('#cameraModal').modal('show');
@@ -184,73 +180,22 @@
                             console.log("An error occurred: " + err);
                         }
                     });
-
-                // $.ajax({
-                //     url: "<?php echo base_url() . "app-login-submit"; ?>",
-                //     type: "post",
-                //     data: formdata,
-                //     beforeSend: function() {
-                //         $(":submit").prop("disabled", true);
-                //         $(":submit").addClass("d-none");
-                //         $("#spinner").removeClass("d-none");
-                //         $("#error").addClass("d-none");
-                //     },
-                //     success: function(res) {
-                //         let obj = JSON.parse(res);
-                //         if (obj.error) {
-                //             $("#error").html(obj.error);
-                //             $("#error").removeClass("d-none");
-                //             $("#spinner").addClass("d-none");
-                //             $(":submit").removeClass("d-none");
-                //             toastr.error("Please check errors list!", "Error");
-                //             $(window).scrollTop(0);
-                //         } else if (obj.success) {
-                //             $("#spinner").addClass("d-none");
-                //             toastr.success("Welcome!", "On Board!");
-                //             setTimeout(function() {
-                //                 window.location = '<?php echo base_url() . 'app-dashboard' ?>';
-                //             }, 1000);
-                //         } else {
-                //             $("#spinner").addClass("d-none");
-                //             $(":submit").prop("disabled", false);
-                //             $(":submit").removeClass("d-none");
-                //             toastr.error("Something bad happened!", "Error");
-                //             $(window).scrollTop(0);
-                //         }
-
-                //         $(":submit").prop("disabled", false);
-                //     },
-                //     error: function(error) {
-                //         toastr.error("Error while sending request to server!", "Error");
-                //         $(window).scrollTop(0);
-                //         $("#spinner").addClass("d-none");
-                //         $(":submit").prop("disabled", false);
-                //         $(":submit").removeClass("d-none");
-                //     }
-                // })
-
-
-      
-
-
-
-
             })
 
-
             $('#captureBtn').on('click', function() {
-                    var formdata = {
-                        username: $("#username").val(),
-                        password: $("#password").val()
-                    };
-                    var video = document.getElementById('cameraView');
-                    var canvas = document.createElement('canvas');
-                    var context = canvas.getContext('2d');
+                var video = document.getElementById('cameraView');
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext('2d');
 
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    var imageData = canvas.toDataURL('image/jpeg');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                canvas.toBlob(function(blob) {
+                    var formdata = new FormData();
+                    formdata.append('username', $("#username").val());
+                    formdata.append('password', $("#password").val());
+                    formdata.append('imageData', blob, 'photo.jpg');
 
                     // Close camera stream
                     stopCameraStream();
@@ -258,14 +203,13 @@
                     // Close camera modal
                     $('#cameraModal').modal('hide');
 
-                    // Append image data to formdata
-                    formdata.imageData = imageData;
-
                     // Send AJAX request
                     $.ajax({
-                        url: "<?php echo base_url() . "app-login-submit"; ?>",
+                        url: "<?php echo base_url() . 'app-login-submit'; ?>",
                         type: "post",
                         data: formdata,
+                        processData: false,
+                        contentType: false,
                         beforeSend: function() {
                             $(":submit").prop("disabled", true);
                             $(":submit").addClass("d-none");
@@ -285,7 +229,7 @@
                                 $("#spinner").addClass("d-none");
                                 toastr.success("Welcome!", "On Board!");
                                 setTimeout(function() {
-                                    window.location = '<?php echo base_url() . 'app-dashboard' ?>';
+                                    window.location = '<?php echo base_url() . 'app-dashboard'; ?>';
                                 }, 1000);
                             } else {
                                 $("#spinner").addClass("d-none");
@@ -304,9 +248,10 @@
                             $(":submit").prop("disabled", false);
                             $(":submit").removeClass("d-none");
                         }
-                    })
-                });
-        })
+                    });
+                }, 'image/jpeg');
+            });
+        });
     </script>
 
 </body>
