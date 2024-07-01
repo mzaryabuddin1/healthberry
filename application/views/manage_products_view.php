@@ -36,6 +36,7 @@ $pagename = "manage_products";
                             <table class="table table-striped" id="datatable">
                                 <thead>
                                     <tr>
+                                        <th>Image</th>
                                         <th>Product Name</th>
                                         <th>Generic</th>
                                         <th>Form</th>
@@ -48,6 +49,7 @@ $pagename = "manage_products";
                                 <tbody>
                                     <?php foreach ($data as $row) : ?>
                                         <tr>
+                                            <td><img src="<?= $row['picture'] ?>" width="50px" alt="product"/></td>
                                             <td><?= $row['name'] ?></td>
                                             <td><?= $row['generic'] ?></td>
                                             <td><?= $row['form'] ?></td>

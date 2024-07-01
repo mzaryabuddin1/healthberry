@@ -45,19 +45,20 @@ class Products_model extends CI_Model
   
   
 
-  public function save_data($name, $generic, $form, $maxpercentage, $created_at)
+  public function save_data($name, $generic, $form, $maxpercentage, $created_at, $picture)
   {
     $data = array(
       'name' => $name,
       'generic' => $generic,
       'form' => $form,
       'maxpercentage' => $maxpercentage,
-      'created_at' => $created_at
+      'created_at' => $created_at,
+      'picture' => $picture
     );
 
     return $this->db->insert('products', $data);
   }
-  public function update_data($id, $name, $generic, $form, $maxpercentage,$status)
+  public function update_data($id, $name, $generic, $form, $maxpercentage,$status, $picture = NULL)
   {
     $data = array(
       'name' => $name,
@@ -66,6 +67,9 @@ class Products_model extends CI_Model
       'status' => $status,
       'maxpercentage' => $maxpercentage
     );
+    if ($picture) {
+      $data['picture'] = $picture;
+    }
 
     $this->db->where('id', $id);
     return $this->db->update('products', $data);

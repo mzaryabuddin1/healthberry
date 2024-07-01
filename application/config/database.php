@@ -75,7 +75,7 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '138.201.162.196',
+	'hostname' => 'b9.creativeon.net',
 	'username' => 'vvehirec_healthberry',
 	'password' => 'K79Qt#8Bmj1A.g',
 	'database' => 'vvehirec_healthberry',
