@@ -50,6 +50,7 @@ $route['location-submit'] = "Locations/location_submit";
 
 //products
 $route['manage-products'] = "Products";
+$route['manage-products-gallery'] = "Products/gallery";
 $route['add-product'] = "Products/add";
 $route['product-submit'] = "Products/product_submit";
 $route['edit-products/(:any)'] = "Products/edit_product/$1";

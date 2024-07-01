@@ -36,6 +36,11 @@ class Products extends CI_Controller
         $data['data'] = $this->Products_model->get_products();
         $this->load->view('manage_products_view', $data);
     }
+    public function gallery()
+    {
+        $data['data'] = $this->Products_model->get_products();
+        $this->load->view('manage_products_gallery_view', $data);
+    }
     public function add()
     {
         $this->load->view('add_products_view');
@@ -70,9 +75,27 @@ class Products extends CI_Controller
             $form = $this->input->post('form');
             $maxpercentage = $this->input->post('maxpercentage');
             $created_at = date('Y-m-d H:i:s'); // Current timestamp
+            $picture = "https://png.pngtree.com/template/20190422/ourmid/pngtree-cross-plus-medical-logo-icon-design-template-image_145195.jpg";
+
+            if(!empty($_FILES['file']['name'])){
+                // Set upload preferences
+                $this->load->library('upload');
+                $config['upload_path'] = 'uploads'; // Path to upload the file
+                $config['allowed_types'] = 'jpg|jpeg|png|gif'; // Allowed file types
+                $config['max_size'] = '2048'; // Maximum file size (2MB)
+                $config['file_name'] = time() . '_' . $_FILES['file']['name']; // Rename the file to avoid conflicts
+                $this->upload->initialize($config);
+    
+                if ($this->upload->do_upload('file')) {
+                    // File upload successful
+                    $upload_data = $this->upload->data();
+                    $picture = base_url() . 'uploads/' . $upload_data['file_name'];
+                }
+            }
+
 
             // Call model method to save the data
-            $result = $this->Products_model->save_data($name, $generic, $form, $maxpercentage, $created_at);
+            $result = $this->Products_model->save_data($name, $generic, $form, $maxpercentage, $created_at, $picture);
 
             if ($result) {
                 $response['status'] = "1";
@@ -108,9 +131,26 @@ class Products extends CI_Controller
             $form = $this->input->post('form');
             $maxpercentage = $this->input->post('maxpercentage');
             $status = $this->input->post('status');
+            $picture = NULL;
+
+            if(!empty($_FILES['file']['name'])){
+                // Set upload preferences
+                $this->load->library('upload');
+                $config['upload_path'] = 'uploads'; // Path to upload the file
+                $config['allowed_types'] = 'jpg|jpeg|png|gif'; // Allowed file types
+                $config['max_size'] = '2048'; // Maximum file size (2MB)
+                $config['file_name'] = time() . '_' . $_FILES['file']['name']; // Rename the file to avoid conflicts
+                $this->upload->initialize($config);
+    
+                if ($this->upload->do_upload('file')) {
+                    // File upload successful
+                    $upload_data = $this->upload->data();
+                    $picture = base_url() . 'uploads/' . $upload_data['file_name'];
+                }
+            }
 
             // Call model method to update the data
-            $result = $this->Products_model->update_data($id, $name, $generic, $form, $maxpercentage,$status);
+            $result = $this->Products_model->update_data($id, $name, $generic, $form, $maxpercentage,$status, $picture);
 
             if($result) {
                 $response['message'] = "Form updated successfully!";

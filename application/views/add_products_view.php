@@ -33,21 +33,26 @@ $pagename = "manage_products";
                             <div class="row">
 
                                 <div class="col-md-6 form-group">
-                                    <label>Product Name</label>
-                                    <input type="text" class="form-control" name="name" placeholder="Product Name">
+                                    <label>Product Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="name" placeholder="Product Name" required>
                                 </div>
 
                                 <div class="col-md-6 form-group">
-                                    <label>Generic</label>
-                                    <input type="text" class="form-control" name="generic" placeholder="Generic">
+                                    <label>Generic <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="generic" placeholder="Generic" required>
                                 </div>
                                 <div class="col-md-6 form-group">
-                                    <label>Form</label>
-                                    <input type="text" class="form-control" name="form" placeholder="Form">
+                                    <label>Form <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="form" placeholder="Form" required>
                                 </div>
                                 <div class="col-md-6 form-group">
-                                    <label>Max Percentage</label>
-                                    <input type="text" class="form-control" name="maxpercentage" placeholder="Max Percentage">
+                                    <label>Max Percentage <span class="text-danger">*</span></label>
+                                    <input type="number" min="0" max="100" step="0.01" class="form-control" name="maxpercentage" placeholder="Max Percentage" required>
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Picture</label>
+                                    <input type="file" class="form-control" name="file" accept="image/*">
                                 </div>
 
 
@@ -80,13 +85,17 @@ $pagename = "manage_products";
             // Disable submit button to prevent multiple submissions
             $('#formSubmit button[type="submit"]').prop('disabled', true);
 
-            var formData = $(this).serialize();
+            // var formData = $(this).serialize();
+            const formdata = new FormData(this)
 
             $.ajax({
                 type: "POST",
                 url: "<?php echo base_url(); ?>product-submit",
-                data: formData,
+                data: formdata,
                 dataType: "json",
+                processData: false, // tell jQuery not to process the data
+				contentType: false, // tell jQuery not to set contentType
+				cache: false,
                 beforeSend: function() {
                     $('#formSubmit button[type="submit"]').prop('disabled', true);
                 },
@@ -100,6 +109,10 @@ $pagename = "manage_products";
                             showConfirmButton: false,
                             timer: 1500 // Automatically close the alert after 1.5 seconds
                         });
+
+                        setTimeout(function() {
+							window.location = '<?php echo base_url() . 'manage-products' ?>';
+						}, 1000);
                     } else {
                         Swal.fire({
                             title: 'Error!',

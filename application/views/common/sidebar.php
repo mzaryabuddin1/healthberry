@@ -295,6 +295,9 @@
 											<li class="nav-item <?= $pagename == "manage_products" ? 'active' : "" ?>">
 												<a class="nav-link" href="<?= base_url() . 'manage-products' ?>"><span class="nav-link-text">Manage</span></a>
 											</li>
+											<li class="nav-item <?= $pagename == "manage_products_gallery" ? 'active' : "" ?>">
+												<a class="nav-link" href="<?= base_url() . 'manage-products-gallery' ?>"><span class="nav-link-text">Gallery</span></a>
+											</li>
 										</ul>
 									</li>
 								</ul>
