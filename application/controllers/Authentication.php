@@ -36,6 +36,9 @@ class Authentication extends CI_Controller
         $this->data['email'] = $information['email'];
 		$this->data['password'] = md5($information['password']);
 
+        // print_r($this->data['password']);
+        // exit; 
+
         $user = $this->Model->login_submit($this->data);
 
         if(!$user){

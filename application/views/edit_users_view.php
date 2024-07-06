@@ -49,7 +49,7 @@ $pagename = "manage_users";
                                
                                 <div class="col-md-6 form-group">
                                     <label>Confirm Password</label>
-                                    <input type="password" class="form-control" name="password" placeholder="Password">
+                                    <input type="password" class="form-control" name="cf_password" placeholder="Password">
                                 </div>
                                 <div class="col-md-6 form-group d-none">
                                     <label>role</label>

@@ -223,10 +223,13 @@ class Users extends CI_Controller
             // Validation passed
             $name = $this->input->post('name');
             $email = $this->input->post('email');
-            $password = md5($this->input->post('password'));
+            $password = $this->input->post('password') ? md5($this->input->post('password')) : NULL;
             $status = $this->input->post('status');
             $roles = $this->input->post('roles');
             $id = $this->input->post('id');
+
+            // print_r($this->input->post('password'));
+            // exit;
 
             // Call model method to save the data
             $result = $this->Users_model->update_data($name, $email, $password, $roles, $status, $id);
