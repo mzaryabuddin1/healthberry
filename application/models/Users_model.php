@@ -80,9 +80,12 @@ class Users_model extends CI_Model {
       'roles' => $roles,
       'status' => $status
     );
-    if($password!==''){
-      $data['password']=md5($password);
+    if($password != NULL){  
+      $data['password']= $password;
     }
+
+    // print_r($data);
+    // exit;
     $this->db->where('id', $id);
     return $this->db->update('users', $data);
   }
