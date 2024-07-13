@@ -27,7 +27,7 @@ $pagename = "dynamic_reports";
         <div class="card mt-3">
             <div class="card-header d-flex justify-content-start">
                 <div class="col-6">
-                    <h6><i class="fa fa-table" aria-hidden="true"></i> Calls</h6>
+                    <h6><i class="fa fa-table" aria-hidden="true"></i> Dynamic Reports</h6>
                 </div>
             </div>
             <div class="card-content">
@@ -108,7 +108,7 @@ $pagename = "dynamic_reports";
             </div>
             <div class="card-content">
                 <div class="card-body">
-                    <table id="dtable" class="d-none">
+                    <table id="dtable" class="d-none table table-bordered">
                         <thead>
                             <tr id="thead">
                             </tr>
@@ -225,8 +225,6 @@ $pagename = "dynamic_reports";
 				success: function(res) {
                     let arr = JSON.parse(res);
 
-                    console.log(arr);
-
                     let header = ""
                     let html = "";
 
@@ -248,7 +246,8 @@ $pagename = "dynamic_reports";
                                     <td>${val.doctor_name}</td>
                             </tr>`;
                         })
-                    }else if(($("#calls-plan").val() == "location_calls" && $("#doctor-user").val() == "doctor") || ($("#calls-plan").val() == "location_calls" && $("#doctor-user").val() == "")){
+                    }else if(($("#calls-plan").val() == "location_calls" && $("#doctor-user").val() == "doctor") || ($("#calls-plan").val() == "location_calls" && $("#doctor-user").val() == null)){
+                        console.log("chala")
                         header = `<th>Doctor</th>
                                 <th>Date</th>
                                 <th>Time</th>
@@ -262,7 +261,7 @@ $pagename = "dynamic_reports";
                                 <td>${formatDate(val.created_at)}</td>
                                 <td>${formatTime(val.created_at.split(' ')[1])}</td>
                                 <td>${val.city_name}</td>
-                                <td><a href="${val.evidance_picture}" target="_blank">View</a></td>
+                                <td><img src="${val.evidance_picture}" width="40px"></img></td>
                                 <td>${val.user_name}</td>
                             </tr>`;
                         })
@@ -282,7 +281,7 @@ $pagename = "dynamic_reports";
                                     <td>${val.doctor_name}</td>
                             </tr>`;
                         })
-                    }else if (($("#calls-plan").val() == "weekly_plan" && $("#doctor-user").val() == "doctor") || ($("#calls-plan").val() == "weekly_plan" && $("#doctor-user").val() == "")){
+                    }else if (($("#calls-plan").val() == "weekly_plan" && $("#doctor-user").val() == "doctor") || ($("#calls-plan").val() == "weekly_plan" && $("#doctor-user").val() == null)){
                         header = `<th>Doctor</th>
                                 <th>Planned Day</th>
                                 <th>Planned Time</th>
@@ -306,13 +305,13 @@ $pagename = "dynamic_reports";
                     // foreach on arr
                     
 
-                    $("#dtable").DataTable({
-                        "dom": 'Bfrtip',
-                        "buttons": ['copy', 'csv', 'excel', 'print'],
-                        "order": [1, 'asc'],
-                        "searching": true,
-                        "destroy": true
-                    })
+                    // $("#dtable").DataTable({
+                    //     "dom": 'Bfrtip',
+                    //     "buttons": ['copy', 'csv', 'excel', 'print'],
+                    //     "order": [1, 'asc'],
+                    //     "searching": true,
+                    //     "destroy": true
+                    // })
 
                     $('#dtable').removeClass('d-none')
                     $("#spinner").addClass("d-none");
