@@ -96,11 +96,11 @@
                             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 <div class="row">
                                     <div class="col-12">
-                                        <form >
+                                        <form id="regstr">
                                             <div class="card">
                                                 <div class="card-content">
                                                     <div class="card-body">
-                                                        <form class="form form-vertical" id="regstr">
+                                                        <form class="form form-vertical" >
                                                             <div class="form-body">
                                                                 <div class="row">
 
