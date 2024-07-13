@@ -96,7 +96,7 @@
                             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 <div class="row">
                                     <div class="col-12">
-                                        <form id="regstr">
+                                        <form >
                                             <div class="card">
                                                 <div class="card-content">
                                                     <div class="card-body">
@@ -298,7 +298,7 @@
                                                                         <button id="resetMarkerBtn" type="button" class="btn btn-block btn-primary">RESET CURRENT LOCATION</button>
                                                                     </div>
                                                                     <div class="col-12 mt-3 d-flex justify-content-end">
-                                                                        <button type="submit" class="btn btn-outline-success me-1 mb-1">Submit For Approval</button>
+                                                                        <button type="submit" class="btn btn-outline-success me-1 mb-1">Save</button>
 
                                                                     </div>
                                                                 </div>
@@ -347,7 +347,7 @@
                                                                             }
                                                                             ?>
                                                                         </td>
-                                                                     
+
                                                                     </tr>
                                                                 <?php endforeach; ?>
                                                             </tbody>
@@ -447,6 +447,9 @@
                         $("#spinner").addClass("d-none");
                         $(":submit").removeClass("d-none");
                         toastr.success("Success!", "Location added for approval!");
+                        setTimeout(function() {
+                            window.location = '<?php echo base_url() . 'app-dashboard'; ?>';
+                        }, 1000);
                     } else {
                         $("#spinner").addClass("d-none");
                         $(":submit").prop("disabled", false);
@@ -495,18 +498,17 @@
             var locationId = $(this).data("locationid");
 
             // Define the formdata object with default values
-            formdata = {
-                plan_id: planId,
-                location_id: locationId,
-                latitude: 0,
-                longitude: 0
-            };
+            formdata = new FormData();
+            formdata.append('plan_id', planId);
+            formdata.append('location_id', locationId);
+            formdata.append('latitude', 0);
+            formdata.append('longitude', 0);
 
             // Get the current location
             navigator.geolocation.getCurrentPosition(function(position) {
                 // Update latitude and longitude with current position
-                formdata.latitude = position.coords.latitude;
-                formdata.longitude = position.coords.longitude;
+                formdata.set('latitude', position.coords.latitude);
+                formdata.set('longitude', position.coords.longitude);
 
                 // Open camera modal
                 $('#cameraModal').modal('show');
@@ -539,55 +541,64 @@
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            var imageData = canvas.toDataURL('image/jpeg');
 
-            // Close camera stream
-            stopCameraStream();
+            // Revert mirroring before capturing the image
+            context.save();
+            context.scale(-1, 1);
+            context.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+            context.restore();
 
-            // Close camera modal
-            $('#cameraModal').modal('hide');
+            canvas.toBlob(function(blob) {
+                // Append image data to formdata
+                formdata.append('imageData', blob, 'photo.jpg');
 
-            // Append image data to formdata
-            formdata.imageData = imageData;
+                // Close camera stream
+                stopCameraStream();
 
-            // Send AJAX request
-            $.ajax({
-                url: "<?php echo base_url() . "app-call-submit"; ?>",
-                type: "post",
-                data: formdata,
-                beforeSend: function() {
-                    // Disable submit button and show spinner
-                    $(".callbtn").prop("disabled", true);
-                    $("#spinner").removeClass("d-none");
-                    $("#error").addClass("d-none");
-                },
-                success: function(res) {
-                    let obj = JSON.parse(res);
-                    if (obj.error) {
-                        $("#error").html(obj.error);
-                        $("#error").removeClass("d-none");
-                        $("#spinner").addClass("d-none");
-                        toastr.error("Please check errors list!", "Error");
+                // Close camera modal
+                $('#cameraModal').modal('hide');
+
+                // Send AJAX request
+                $.ajax({
+                    url: "<?php echo base_url() . 'app-call-submit'; ?>",
+                    type: "post",
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        // Disable submit button and show spinner
+                        $(".callbtn").prop("disabled", true);
+                        $("#spinner").removeClass("d-none");
+                        $("#error").addClass("d-none");
+                    },
+                    success: function(res) {
+                        let obj = JSON.parse(res);
+                        if (obj.error) {
+                            $("#error").html(obj.error);
+                            $("#error").removeClass("d-none");
+                            $("#spinner").addClass("d-none");
+                            toastr.error("Please check errors list!", "Error");
+                            $(window).scrollTop(0);
+                        } else if (obj.success) {
+                            $("#spinner").addClass("d-none");
+                            toastr.success("Success!", "Call Successfully Added!");
+                        } else {
+                            $("#spinner").addClass("d-none");
+                            $(".callbtn").prop("disabled", false);
+                            toastr.error("Something bad happened!", "Error");
+                            $(window).scrollTop(0);
+                        }
+
+                        $(".callbtn").prop("disabled", false);
+                    },
+                    error: function(error) {
+                        toastr.error("Error while sending request to server!", "Error");
                         $(window).scrollTop(0);
-                    } else if (obj.success) {
-                        $("#spinner").addClass("d-none");
-                        toastr.success("Success!", "Call Successfully Added!");
-                    } else {
                         $("#spinner").addClass("d-none");
                         $(".callbtn").prop("disabled", false);
-                        toastr.error("Something bad happened!", "Error");
-                        $(window).scrollTop(0);
                     }
-
-                    $(".callbtn").prop("disabled", false);
-                },
-                error: function(error) {
-                    toastr.error("Error while sending request to server!", "Error");
-                    $(window).scrollTop(0);
-                    $("#spinner").addClass("d-none");
-                    $(".callbtn").prop("disabled", false);
-                }
-            });
+                });
+            }, 'image/jpeg');
         });
 
         // Listen for modal close event
@@ -608,7 +619,7 @@
         var hours = ("0" + date.getHours()).slice(-2);
         var minutes = ("0" + date.getMinutes()).slice(-2);
         var seconds = ("0" + date.getSeconds()).slice(-2);
-        
+
         return day + '-' + month + '-' + year + ' ' + hours + ':' + minutes + ':' + seconds;
     }
 
@@ -745,10 +756,10 @@
                 // Event listener for map click
                 map.on('click', function(e) {
                     var newLatLng = e.latlng;
-                    marker.setLatLng(newLatLng); // Update marker position
-                    map.panTo(newLatLng); // Move map to the clicked position
-                    $("#lat").val(newLatLng.lat);
-                    $("#lng").val(newLatLng.lng);
+                    // marker.setLatLng(newLatLng); // Update marker position
+                    // map.panTo(newLatLng); // Move map to the clicked position
+                    // $("#lat").val(newLatLng.lat);
+                    // $("#lng").val(newLatLng.lng);
                 });
             });
         }, 1500); // 100 milliseconds delay

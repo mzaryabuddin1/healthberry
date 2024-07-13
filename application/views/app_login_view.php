@@ -134,132 +134,131 @@
 
     <script>
         $(function() {
-    // Function to stop the camera stream
-    function stopCameraStream() {
-        var video = document.getElementById('cameraView');
-        if (video.srcObject) {
-            var stream = video.srcObject;
-            var tracks = stream.getTracks();
-
-            tracks.forEach(function(track) {
-                track.stop();
-            });
-
-            video.srcObject = null;
-        }
-    }
-
-    // Listen for modal close event
-    $('#cameraModal').on('hidden.bs.modal', function() {
-        // Call the function to stop the camera stream
-        stopCameraStream();
-    });
-
-    $("#regstr").on("submit", function(e) {
-        e.preventDefault();
-        var formdata = new FormData();
-        formdata.append('username', $("#username").val());
-        formdata.append('password', $("#password").val());
-
-        // Open camera modal
-        $('#cameraModal').modal('show');
-
-        // Get camera stream and display in modal
-        navigator.mediaDevices.getUserMedia({
-                video: true
-            })
-            .then(function(stream) {
+            // Function to stop the camera stream
+            function stopCameraStream() {
                 var video = document.getElementById('cameraView');
-                video.srcObject = stream;
-                video.play();
-                // Apply mirror effect
-                video.style.transform = "scaleX(-1)";
-            })
-            .catch(function(err) {
-                if (err.name === 'NotAllowedError') {
-                    alert("You have denied permission to access the camera. Please grant permission to proceed.");
-                } else {
-                    console.log("An error occurred: " + err);
+                if (video.srcObject) {
+                    var stream = video.srcObject;
+                    var tracks = stream.getTracks();
+
+                    tracks.forEach(function(track) {
+                        track.stop();
+                    });
+
+                    video.srcObject = null;
                 }
+            }
+
+            // Listen for modal close event
+            $('#cameraModal').on('hidden.bs.modal', function() {
+                // Call the function to stop the camera stream
+                stopCameraStream();
             });
-    });
 
-    $('#captureBtn').on('click', function() {
-        var video = document.getElementById('cameraView');
-        var canvas = document.createElement('canvas');
-        var context = canvas.getContext('2d');
+            $("#regstr").on("submit", function(e) {
+                e.preventDefault();
+                var formdata = new FormData();
+                formdata.append('username', $("#username").val());
+                formdata.append('password', $("#password").val());
 
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+                // Open camera modal
+                $('#cameraModal').modal('show');
 
-        // Revert mirroring before capturing the image
-        context.save();
-        context.scale(-1, 1);
-        context.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
-        context.restore();
-
-        canvas.toBlob(function(blob) {
-            var formdata = new FormData();
-            formdata.append('username', $("#username").val());
-            formdata.append('password', $("#password").val());
-            formdata.append('imageData', blob, 'photo.jpg');
-
-            // Close camera stream
-            stopCameraStream();
-
-            // Close camera modal
-            $('#cameraModal').modal('hide');
-
-            // Send AJAX request
-            $.ajax({
-                url: "<?php echo base_url() . 'app-login-submit'; ?>",
-                type: "post",
-                data: formdata,
-                processData: false,
-                contentType: false,
-                beforeSend: function() {
-                    $(":submit").prop("disabled", true);
-                    $(":submit").addClass("d-none");
-                    $("#spinner").removeClass("d-none");
-                    $("#error").addClass("d-none");
-                },
-                success: function(res) {
-                    let obj = JSON.parse(res);
-                    if (obj.error) {
-                        $("#error").html(obj.error);
-                        $("#error").removeClass("d-none");
-                        $("#spinner").addClass("d-none");
-                        $(":submit").removeClass("d-none");
-                        toastr.error("Please check errors list!", "Error");
-                        $(window).scrollTop(0);
-                    } else if (obj.success) {
-                        $("#spinner").addClass("d-none");
-                        toastr.success("Welcome!", "On Board!");
-                        setTimeout(function() {
-                            window.location = '<?php echo base_url() . 'app-dashboard'; ?>';
-                        }, 1000);
-                    } else {
-                        $("#spinner").addClass("d-none");
-                        $(":submit").prop("disabled", false);
-                        $(":submit").removeClass("d-none");
-                        toastr.error("Something bad happened!", "Error");
-                        $(window).scrollTop(0);
-                    }
-
-                    $(":submit").prop("disabled", false);
-                },
-                error: function(error) {
-                    toastr.error("Error while sending request to server!", "Error");
-                    $(window).scrollTop(0);
-                    $("#spinner").addClass("d-none");
-                    $(":submit").prop("disabled", false);
-                    $(":submit").removeClass("d-none");
-                }
+                // Get camera stream and display in modal
+                navigator.mediaDevices.getUserMedia({
+                        video: true
+                    })
+                    .then(function(stream) {
+                        var video = document.getElementById('cameraView');
+                        video.srcObject = stream;
+                        video.play();
+                        // Apply mirror effect
+                        video.style.transform = "scaleX(-1)";
+                    })
+                    .catch(function(err) {
+                        if (err.name === 'NotAllowedError') {
+                            alert("You have denied permission to access the camera. Please grant permission to proceed.");
+                        } else {
+                            console.log("An error occurred: " + err);
+                        }
+                    });
             });
-        }, 'image/jpeg');
-    });
-});
 
+            $('#captureBtn').on('click', function() {
+                var video = document.getElementById('cameraView');
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext('2d');
+
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                // Revert mirroring before capturing the image
+                context.save();
+                context.scale(-1, 1);
+                context.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+                context.restore();
+
+                canvas.toBlob(function(blob) {
+                    var formdata = new FormData();
+                    formdata.append('username', $("#username").val());
+                    formdata.append('password', $("#password").val());
+                    formdata.append('imageData', blob, 'photo.jpg');
+
+                    // Close camera stream
+                    stopCameraStream();
+
+                    // Close camera modal
+                    $('#cameraModal').modal('hide');
+
+                    // Send AJAX request
+                    $.ajax({
+                        url: "<?php echo base_url() . 'app-login-submit'; ?>",
+                        type: "post",
+                        data: formdata,
+                        processData: false,
+                        contentType: false,
+                        beforeSend: function() {
+                            $(":submit").prop("disabled", true);
+                            $(":submit").addClass("d-none");
+                            $("#spinner").removeClass("d-none");
+                            $("#error").addClass("d-none");
+                        },
+                        success: function(res) {
+                            let obj = JSON.parse(res);
+                            if (obj.error) {
+                                $("#error").html(obj.error);
+                                $("#error").removeClass("d-none");
+                                $("#spinner").addClass("d-none");
+                                $(":submit").removeClass("d-none");
+                                toastr.error("Please check errors list!", "Error");
+                                $(window).scrollTop(0);
+                            } else if (obj.success) {
+                                $("#spinner").addClass("d-none");
+                                toastr.success("Welcome!", "On Board!");
+                                setTimeout(function() {
+                                    window.location = '<?php echo base_url() . 'app-dashboard'; ?>';
+                                }, 1000);
+                            } else {
+                                $("#spinner").addClass("d-none");
+                                $(":submit").prop("disabled", false);
+                                $(":submit").removeClass("d-none");
+                                toastr.error("Something bad happened!", "Error");
+                                $(window).scrollTop(0);
+                            }
+
+                            $(":submit").prop("disabled", false);
+                        },
+                        error: function(error) {
+                            toastr.error("Error while sending request to server!", "Error");
+                            $(window).scrollTop(0);
+                            $("#spinner").addClass("d-none");
+                            $(":submit").prop("disabled", false);
+                            $(":submit").removeClass("d-none");
+                        }
+                    });
+                }, 'image/jpeg');
+            });
+        });
     </script>
 
 </body>
