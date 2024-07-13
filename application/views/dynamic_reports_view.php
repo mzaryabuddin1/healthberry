@@ -108,15 +108,17 @@ $pagename = "dynamic_reports";
             </div>
             <div class="card-content">
                 <div class="card-body">
-                    <table id="dtable" class="d-none table table-bordered">
-                        <thead>
-                            <tr id="thead">
-                            </tr>
-                        </thead>
-                        <tbody id="tbody">
+                    <div class="table-responsive">
+                        <table id="dtable" class="d-none table table-bordered">
+                            <thead>
+                                <tr id="thead">
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -242,7 +244,7 @@ $pagename = "dynamic_reports";
                                     <td>${formatDate(val.created_at)}</td>
                                     <td>${formatTime(val.created_at.split(' ')[1])}</td>
                                     <td>${val.city_name}</td>
-                                    <td><a href="${val.evidance_picture}" target="_blank">View</a></td>
+                                    <td><img src="${val.evidance_picture}" width="80px"></img></td>
                                     <td>${val.doctor_name}</td>
                             </tr>`;
                         })
@@ -261,7 +263,7 @@ $pagename = "dynamic_reports";
                                 <td>${formatDate(val.created_at)}</td>
                                 <td>${formatTime(val.created_at.split(' ')[1])}</td>
                                 <td>${val.city_name}</td>
-                                <td><img src="${val.evidance_picture}" width="40px"></img></td>
+                                <td><img src="${val.evidance_picture}" width="80px"></img></td>
                                 <td>${val.user_name}</td>
                             </tr>`;
                         })
