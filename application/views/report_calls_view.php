@@ -74,7 +74,7 @@ $pagename = "report_calls";
                         </div>
                     </form>
 
-                    <table id="dtable" class="d-none">
+                    <table id="dtable" class="d-none table table-bordered">
                     </table>
                 </div>
             </div>
@@ -175,12 +175,12 @@ $pagename = "report_calls";
                     createTable(arr);
 
 
-                    $("#dtable").DataTable({
-                        "dom": 'Bfrtip',
-                        "buttons": ['copy', 'csv', 'excel', 'print'],
-                        "order": [1, 'asc'],
-                        "searching": true
-                    })
+                    // $("#dtable").DataTable({
+                    //     "dom": 'Bfrtip',
+                    //     "buttons": ['copy', 'csv', 'excel', 'print'],
+                    //     "order": [1, 'asc'],
+                    //     "searching": true
+                    // })
 
                     $('#dtable').removeClass('d-none')
                     $("#spinner").addClass("d-none");
