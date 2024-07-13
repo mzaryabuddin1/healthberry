@@ -45,12 +45,12 @@ class Appuser extends CI_Controller
       $errors = array('error' => validation_errors());
       print_r(json_encode($errors));
       exit;
-    }
+    } 
 
     $information = $this->security->xss_clean($this->input->post());
 
     // Handle the uploaded file
-    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . "/healthberry/uploads/";
+    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . "/hblive/uploads/";
     $fileTmpPath = $_FILES['imageData']['tmp_name'];
     $fileName = uniqid() . '_' . $_FILES['imageData']['name'];
     $fileSize = $_FILES['imageData']['size'];
@@ -203,7 +203,7 @@ class Appuser extends CI_Controller
     $information = $this->security->xss_clean($this->input->post());
 
     // Handle the uploaded file
-    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . "/healthberry/uploads/";
+    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . "/hblive/uploads/";
     $fileTmpPath = $_FILES['imageData']['tmp_name'];
     $fileName = uniqid() . '_' . $_FILES['imageData']['name'];
     $fileSize = $_FILES['imageData']['size'];
