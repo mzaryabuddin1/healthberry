@@ -42,11 +42,12 @@ $pagename = "manage_locations";
                                         <th>Chemists</th>
                                         <th>Specialities</th>
                                         <th>Timings</th>
-                                        <th>Latitude</th>
-                                        <th>Longitude</th>
+                                        <!-- <th>Latitude</th>
+                                        <th>Longitude</th> -->
                                         <th>Account</th>
                                         <th>Status</th>
                                         <th>Created at</th>
+                                        <th>Location</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -80,11 +81,12 @@ $pagename = "manage_locations";
                                                     }
                                                 ?>
                                             </td>
-                                            <td><?= $row['latitude'] ?></td>
-                                            <td><?= $row['longitude'] ?></td>
+                                            <!-- <td><?= $row['latitude'] ?></td>
+                                            <td><?= $row['longitude'] ?></td> -->
                                             <td><?= ($row['is_approved'] == 1) ? 'approved' : 'Not approved' ?></td>
                                             <td><?= $row['status'] ? 'Active' : 'Inactive' ?></td>
                                             <td><?= $row['created_at'] ?></td>
+                                            <td class="justify-content-center"><a href="https://www.google.com/maps?q=<?= $row['latitude'] ?>,<?= $row['longitude'] ?>"><i class="bi bi-geo-alt-fill"></i></a></td>
                                             <td><button class="btn btn-primary">Edit</button></td>
                                         </tr>
                                     <?php endforeach; ?>
