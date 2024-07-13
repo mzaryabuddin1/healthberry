@@ -35,16 +35,16 @@ $pagename = "report_calls";
                     <form id="regstr">
                         <div class="row">
                             <div class="col-sm-3">
-                                <label for="">Date From</label>
-                                <input type="date" class="form-control" name="datefrom" id="datefrom" placeholder="Date From">
+                                <label for="">Date From <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" name="datefrom" id="datefrom" placeholder="Date From" required>
                             </div>
                             <div class="col-sm-3">
-                                <label for="">Date To</label>
-                                <input type="date" class="form-control" name="dateto" id="dateto" placeholder="Date To">
+                                <label for="">Date To <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" name="dateto" id="dateto" placeholder="Date To" required>
                             </div>
                             <div class="col-sm-3">
-                                <label for="">Users</label>
-                                <select class="form-control" name="app_user_id" id="app_user_id">
+                                <label for="">Users <span class="text-danger">*</span></label>
+                                <select class="form-control" name="app_user_id" id="app_user_id" required>
                                     <option value="" selected disabled>Select</option>
                                     <?php foreach ($app_users as $key => $user) : ?>
                                         <option value="<?= $user['id']?>"><?= $user['username']?></option>
@@ -52,8 +52,8 @@ $pagename = "report_calls";
                                 </select>
                             </div>
                             <div class="col-sm-3">
-                                <label for="">Day</label>
-                                <select class="form-control" name="dayname" id="dayname">
+                                <label for="">Day <span class="text-danger">*</span></label>
+                                <select class="form-control" name="dayname" id="dayname" required>
                                     <option value="" selected disabled>Select</option>
                                     <option value="Monday">Monday</option>
                                     <option value="Tuesday">Tuesday</option>
@@ -73,9 +73,10 @@ $pagename = "report_calls";
                             </div>
                         </div>
                     </form>
-
-                    <table id="dtable" class="d-none table table-bordered">
-                    </table>
+                    <div class="table-responsive">
+                        <table id="dtable" class="d-none table table-bordered">
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -94,7 +95,7 @@ $pagename = "report_calls";
 
 		$("#regstr").on("submit", function(e) {
 			e.preventDefault()
-
+            $("#dtable").html('')
 			const formdata = new FormData(this)
 
 			$.ajax({
