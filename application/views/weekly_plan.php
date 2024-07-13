@@ -284,7 +284,7 @@ $pagename = "weekly_plan";
                              tbl1html += value.dayname + " - " + value.from + " - " + value.to + "<br>"
                          })
                          tbl1html += "</td>"
-                         tbl1html += "<td><a href='https://www.google.com/maps?q="+ valueOfElement.latitude +","+ valueOfElement.longitude +"' target='_blank'><i class='fa fa-map-marker' aria-hidden='true'></i></a></td>"
+                         tbl1html += "<td><a href='https://www.google.com/maps?q="+ valueOfElement.latitude +","+ valueOfElement.longitude +"' target='_blank'><i class='bi bi-geo-alt-fill'></i></a></td>"
                          tbl1html += "<td><button class='btn btn-sm btn-primary modalbtn' data-bs-toggle='modal' data-bs-target='#staticBackdrop' data-locid='"+ valueOfElement.id +"' data-appuserid='"+ $("#user").val() +"'>Plan</button></td>"
                          tbl1html += "</tr>"
                     });
@@ -312,7 +312,7 @@ $pagename = "weekly_plan";
                         tbl2html += "</td>"
                         tbl2html += "<td>" + valueOfElement.planned_day + "</td>"
                         tbl2html += "<td>" + valueOfElement.planned_time + "</td>"
-                        tbl2html += "<td><a href='https://www.google.com/maps?q="+ valueOfElement.latitude +","+ valueOfElement.longitude +"' target='_blank'><i class='fa fa-map-marker' aria-hidden='true'></i></a></td>"
+                        tbl2html += "<td><a href='https://www.google.com/maps?q="+ valueOfElement.latitude +","+ valueOfElement.longitude +"' target='_blank'><i class='bi bi-geo-alt-fill'></i></a></td>"
                         tbl2html += "<td><div class='row'><button class='btn btn-sm btn-danger rm-btn col-8' data-planid='"+ valueOfElement.plan_id +"'>Remove</button> <button class='btn btn-sm btn-primary col-4 modalbtn2' data-planid='"+ valueOfElement.plan_id +"' data-planday='"+ valueOfElement.planned_day +"' data-plantime='"+ valueOfElement.planned_time +"' data-bs-toggle='modal' data-bs-target='#staticBackdrop2'><i class='fa fa-edit'></i></button></div></td>"
                         tbl2html += "</tr>"
 
