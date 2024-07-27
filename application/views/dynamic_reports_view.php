@@ -132,8 +132,27 @@ $pagename = "dynamic_reports";
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<?php
 
+function unsetProblematicFields(&$data) {
+    foreach ($data as &$item) {
+        // Unset fields that might be problematic
+        unset($item['products']);
+        unset($item['chemists']);
+        unset($item['specialities']);
+        unset($item['timings']);
+    }
+}
+unsetProblematicFields($app_users);
+unsetProblematicFields($locations);
+
+$json_app_users = json_encode($app_users);
+$json_doctors = json_encode($locations);
+?>
 <script>
+    var app_users = `<?= $json_app_users ?>`
+    var doctors = `<?= $json_doctors ?>`
+
     $("#doctor-user").change(function (){
         if($(this).val() == "doctor"){
             $("#doctor-select").removeClass("d-none");
@@ -142,6 +161,33 @@ $pagename = "dynamic_reports";
             $("#doctor-select").addClass("d-none");
             $("#user-select").removeClass("d-none");
         }
+    })
+
+    $("#city_id").change(function () {
+        var city_id = $(this).val();
+        var app_users_parsed = JSON.parse(app_users);
+        var doctors_parsed = JSON.parse(doctors);
+
+        var filtered_app_users = app_users_parsed.filter(function(user) {
+            return user.city == city_id;
+        });
+        var filtered_doctors = doctors_parsed.filter(function(doctor) {
+            return doctor.city == city_id;
+        });
+
+        var app_users_html = `<option value="" selected disabled>Select</option>`;
+        app_users_html += filtered_app_users.map(function(element) {
+            return `<option value="${element.id}">${element.username}</option>`;
+        }).join('');
+
+        var doctor_html = `<option value="" selected disabled>Select</option>`;
+        doctor_html += filtered_doctors.map(function(element) {
+            return `<option value="${element.id}">${element.doctor_name}</option>`;
+        }).join('');
+
+        $("#app_user_id").html(app_users_html)
+        $("#location_id").html(doctor_html)
+
     })
 
     $("#calls-plan").change(function () {

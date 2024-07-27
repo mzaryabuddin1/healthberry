@@ -32,11 +32,24 @@ class Locations_model extends CI_Model {
   public function get_locations()
   {
     // return $this->db->select("*")->from('locations')->get()->result_array();
-    return $this->db->select('locations.*, cities.city_name')
-         ->from('locations')
-         ->join('cities', 'cities.id = locations.city')
-         ->get()
-         ->result_array();
+    // return $this->db->select('locations.*, cities.city_name')
+    //      ->from('locations')
+    //      ->join('cities', 'cities.id = locations.city')
+    //      ->get()
+    //      ->result_array();
+      $sql = "
+          SELECT locations.*, cities.city_name, GROUP_CONCAT(products.name) AS product_names FROM locations JOIN cities ON cities.id = locations.city LEFT JOIN products ON FIND_IN_SET(products.id, REPLACE(REPLACE(REPLACE(locations.products, '[', ''), ']', ''), '\"', '')) GROUP BY locations.id;
+      ";
+  
+      return $this->db->query($sql)->result_array();
+  }
+  public function get_locations_via_id($id)
+  {
+    $sql = "
+      SELECT locations.*, cities.city_name, GROUP_CONCAT(products.name) AS product_names FROM locations JOIN cities ON cities.id = locations.city LEFT JOIN products ON FIND_IN_SET(products.id, REPLACE(REPLACE(REPLACE(locations.products, '[', ''), ']', ''), '\"', '')) WHERE locations.id = $id GROUP BY locations.id;
+    ";
+
+    return $this->db->query($sql)->row_array();
   }
   public function insert_location($data) {
     // Insert data into 'locations' table

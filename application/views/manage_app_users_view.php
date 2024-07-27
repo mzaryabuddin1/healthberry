@@ -37,6 +37,7 @@ $pagename = "manage_app_users";
                                 <tr>
                                     <th>User Name</th>
                                     <th>Profile</th>
+                                    <th>City</th>
                                     <th>Created</th>
                                     <th>Status</th>
                                     <th>Action</th>
@@ -47,6 +48,7 @@ $pagename = "manage_app_users";
                                     <tr>
                                         <td><?= $row['username'] ?></td>
                                         <td><img src="<?= $row['profile_picture'] ?>" alt="" style="width:100px;height:100px"></td>
+                                        <td><?= $row['city_name'] ?></td>
                                         <td><?= $row['created_at'] ?></td>
                                         <td><?= $row['status'] ? 'Active' : 'Inactive' ?></td>
                                         <td><a href="<?php echo base_url()?>edit-app-user/<?= $row['id'] ?>" class="btn btn-primary">Edit</a></td>
