@@ -44,12 +44,21 @@ $pagename = "manage_app_users";
                                     <input type="password" class="form-control" name="password" placeholder="Password" >
                                 </div>
 
-                                <div class="col-md-6 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>Profile Picture</label>
                                     <input type="file" class="form-control" name="file_name">
                                 </div>
 
-                                <div class="col-md-6 form-group">
+                                <div class="col-md-4 form-group">
+                                    <label>City</label>
+                                    <select name="city" class="form-control">
+                                        <?php foreach($cities as $row) : ?>
+                                            <option value="<?= $row['id'] ?>" <?= ($row['id'] == $data['city'])? 'selected' : '' ?> ><?= $row['city_name'] ?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4 form-group">
                                     <label>Status</label>
                                     <select name="status" class="form-control">
                                         <option value="1" <?php echo ($data['status'] == 1) ? 'selected' : ''; ?>>Active</option>

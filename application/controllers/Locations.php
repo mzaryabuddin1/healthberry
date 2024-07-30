@@ -31,6 +31,11 @@ class Locations extends CI_Controller
         $this->load->model('Locations_model');
 
     }
+    
+    public function view_doctor_details($id) {
+        $data['data'] = $this->Locations_model->get_locations_via_id($id);
+        $this->load->view('location_detail_view', $data);
+    }
 
     public function index()
     {

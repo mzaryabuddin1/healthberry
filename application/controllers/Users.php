@@ -142,6 +142,7 @@ class Users extends CI_Controller
 
         $this->form_validation->set_rules('id', 'ID', 'required');
         $this->form_validation->set_rules('password', 'Password', 'trim');
+        $this->form_validation->set_rules('city', 'City', 'trim|numeric|required');
         $this->form_validation->set_rules('status', 'Status', 'trim|required');
 
         // Run validation
@@ -160,6 +161,7 @@ class Users extends CI_Controller
             $update['updated_at'] = $this->__currentdatetime;
             $update['updated_by'] = $_SESSION['user_id'];
             $update['status'] = $this->input->post('status');
+            $update['city'] = $this->input->post('city');
 
             if ($_FILES["file_name"]["tmp_name"]) {
                 //VALIDATE EXTENSION
@@ -262,6 +264,7 @@ class Users extends CI_Controller
             header("Location: " . base_url() . 'manage-app-users');
             exit;
         }
+        $data['cities'] = $this->Users_model->get_cities();
         $this->load->view('edit_app_user_view', $data);
     }
 }

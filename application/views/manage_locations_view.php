@@ -3,6 +3,8 @@
 $pagetab = "locations";
 $pagename = "manage_locations";
 
+// print_r($data);exit;
+
 ?>
 
 <?php require_once('common/header.php') ?>
@@ -42,6 +44,7 @@ $pagename = "manage_locations";
                                         <th>Chemists</th>
                                         <th>Specialities</th>
                                         <th>Timings</th>
+                                        <th>Products</th>
                                         <!-- <th>Latitude</th>
                                         <th>Longitude</th> -->
                                         <th>Account</th>
@@ -80,6 +83,9 @@ $pagename = "manage_locations";
                                                         echo $var["dayname"] . " - " . $var["from"] . " - " . $var["to"] . "<br>";
                                                     }
                                                 ?>
+                                            </td>
+                                            <td>
+                                                <?= $row['product_names'] ?>
                                             </td>
                                             <!-- <td><?= $row['latitude'] ?></td>
                                             <td><?= $row['longitude'] ?></td> -->

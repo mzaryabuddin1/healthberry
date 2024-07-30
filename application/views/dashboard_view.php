@@ -140,9 +140,14 @@ $pagename = "dashboard";
         var lat = parseFloat(item.latitude);
         var lng = parseFloat(item.longitude);
         var marker = L.marker([lat, lng]).addTo(map);
-
+        
+        var link = `<?= base_url() ?>view-doctor-details/${item.id}`;
+        // console.log(link)
+        var popupContent = `<div>
+            <a target="_blank" href="${link}">${item.doctor_name}</a>
+        </div>`;
         // Optional: Add a popup with the doctor's name
-        marker.bindPopup(item.doctor_name).openPopup();
+        marker.bindPopup(popupContent).openPopup();
 
         // Extend the bounds to include this marker's location
         bounds.extend([lat, lng]);

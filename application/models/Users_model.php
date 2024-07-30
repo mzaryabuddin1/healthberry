@@ -35,7 +35,14 @@ class Users_model extends CI_Model {
   }
   public function get_app_users()
   {
-    return $this->db->select("*")->from('app_users')->get()->result_array();
+    return $this->db->select("app_users.*, cities.city_name")->from('app_users')
+    ->join('cities', 'cities.id = app_users.city')
+    ->get()->result_array();
+  }
+
+  public function get_cities()
+  {
+    return $this->db->select("*")->from('cities')->get()->result_array();
   }
   
   // ------------------------------------------------------------------------
