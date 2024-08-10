@@ -93,7 +93,7 @@ $pagename = "manage_locations";
                                             <td><?= $row['status'] ? 'Active' : 'Inactive' ?></td>
                                             <td><?= $row['created_at'] ?></td>
                                             <td class="justify-content-center"><a href="https://www.google.com/maps?q=<?= $row['latitude'] ?>,<?= $row['longitude'] ?>" target="_blank"><i class="bi bi-geo-alt-fill"></i></a></td>
-                                            <td><button class="btn btn-primary">Edit</button></td>
+                                            <td><a class="btn btn-primary" href="<?= base_url() . "edit-location/" . $row['id'] ?>">Edit</a></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>

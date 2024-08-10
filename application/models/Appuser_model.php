@@ -65,6 +65,7 @@ class Appuser_model extends CI_Model {
       ->join('app_users', 'app_users.id = weekly_plan.app_user_id', 'left')
       ->join('locations', 'locations.id = weekly_plan.location_id', 'left')
       ->join('cities', 'cities.id = locations.city', 'left')
+      ->order_by('weekly_plan.created_at', 'desc')
       ->get()
       ->result_array());
   }
@@ -152,6 +153,7 @@ class Appuser_model extends CI_Model {
       ->where('locations.created_user', "appuser")
       ->where('locations.status', 1)
       ->join('cities', 'cities.id = locations.city', 'left')
+      ->order_by('locations.created_at', 'desc')
       ->get()
       ->result_array());
   }

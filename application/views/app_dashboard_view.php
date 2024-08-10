@@ -37,6 +37,7 @@
                         </ul>
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <input type="text" class="form-control mt-2"  id="doctorSearch" placeholder="Search Doctor">
                                 <div class="table-responsive mt-3">
                                     <table class="table table-bordered table-hover">
                                         <thead class="bg-secondary text-light text-center">
@@ -49,7 +50,7 @@
                                             <th>TIMINGS</th>
                                             <th>CALL</th>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="doctorTableBody">
                                             <?php foreach ($plan as $row) : ?>
                                                 <tr>
                                                     <td><?= ucfirst($row['doctor_name']) ?></td>
@@ -718,6 +719,22 @@
             $(this).parent().parent().parent().remove()
         })
     })
+</script>
+
+<script>
+    document.getElementById('doctorSearch').addEventListener('keyup', function() {
+        const filter = this.value.toUpperCase();
+        const rows = document.querySelectorAll('#doctorTableBody tr');
+        
+        rows.forEach(function(row) {
+            const doctorName = row.querySelector('td').innerText.toUpperCase();
+            if (doctorName.indexOf(filter) > -1) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
 </script>
 
 

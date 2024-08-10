@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  *
@@ -16,7 +16,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  *
  */
 
-class Locations_model extends CI_Model {
+class Locations_model extends CI_Model
+{
 
   // ------------------------------------------------------------------------
 
@@ -37,11 +38,11 @@ class Locations_model extends CI_Model {
     //      ->join('cities', 'cities.id = locations.city')
     //      ->get()
     //      ->result_array();
-      $sql = "
+    $sql = "
           SELECT locations.*, cities.city_name, GROUP_CONCAT(products.name) AS product_names FROM locations JOIN cities ON cities.id = locations.city LEFT JOIN products ON FIND_IN_SET(products.id, REPLACE(REPLACE(REPLACE(locations.products, '[', ''), ']', ''), '\"', '')) GROUP BY locations.id;
       ";
-  
-      return $this->db->query($sql)->result_array();
+
+    return $this->db->query($sql)->result_array();
   }
   public function get_locations_via_id($id)
   {
@@ -51,10 +52,17 @@ class Locations_model extends CI_Model {
 
     return $this->db->query($sql)->row_array();
   }
-  public function insert_location($data) {
+  public function insert_location($data)
+  {
     // Insert data into 'locations' table
     return $this->db->insert('locations', $data);
-}
+  }
+
+  public function update_location($id, $data)
+  {
+    $this->db->where('id', $id);
+    return $this->db->update('locations', $data);
+  }
   // ------------------------------------------------------------------------
 
 }

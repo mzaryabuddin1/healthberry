@@ -76,11 +76,11 @@ $pagename = "manage_locations";
                                     </select>
                                 </div>
                                 <div class="col-md-6 form-group">
-                                    <label>Chemists</label>
+                                    <label>Chemists (x,y,z)</label>
                                     <input type="text" class="form-control" id="chemists" name="chemists" placeholder="Chemists" required>
                                 </div>
                                 <div class="col-md-6 form-group">
-                                    <label>Specialities</label>
+                                    <label>Specialities (x,y,z)</label>
                                     <input type="text" class="form-control" id="specialities" name="specialities" placeholder="specialities" required>
                                 </div>
                                 <div class="col-md-12 col-12">

@@ -43,6 +43,8 @@ $route['edit-app-user-submit'] = "Users/edit_app_user_submit";
 //locations
 $route['manage-locations'] = "Locations";
 $route['add-location'] = "Locations/add";
+$route['edit-location/(:num)'] = "Locations/edit/$1";
+$route['edit-location-submit/(:num)'] = "Locations/edit_location_submit/$1";
 $route['location-submit'] = "Locations/location_submit";
 $route['view-doctor-details/(:num)'] = "Locations/view_doctor_details/$1";
 

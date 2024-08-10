@@ -45,15 +45,15 @@ $pagename = "dynamic_reports";
                             <div class="col-sm-2">
                                 <label for="">City</label>
                                 <select class="form-control" name="city_id" id="city_id">
-                                    <option value="" selected disabled>Select City</option>
+                                    <option value="" selected >Select City</option>
                                     <?php foreach ($cities as $key => $city) : ?>
-                                        <option value="<?= $city['id']?>"><?= $city['city_name']?></option>
+                                        <option value="<?= $city['id'] ?>"><?= $city['city_name'] ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
                             <div class="col-sm-2">
                                 <label for="">Doctor/User</label>
-                                <select name="doctor-user" class="form-control"  id="doctor-user">
+                                <select name="doctor-user" class="form-control" id="doctor-user">
                                     <option value="" selected disabled>Select</option>
                                     <option value="doctor">Doctor</option>
                                     <option value="user">User</option>
@@ -72,7 +72,7 @@ $pagename = "dynamic_reports";
                                 <select class="form-control" name="app_user_id" id="app_user_id">
                                     <option value="" selected disabled>Select User</option>
                                     <?php foreach ($app_users as $key => $user) : ?>
-                                        <option value="<?= $user['id']?>"><?= $user['username']?></option>
+                                        <option value="<?= $user['id'] ?>"><?= $user['username'] ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
@@ -81,7 +81,7 @@ $pagename = "dynamic_reports";
                                 <select class="form-control" name="location_id" id="location_id">
                                     <option value="" selected disabled>Select Doctor</option>
                                     <?php foreach ($locations as $key => $doctor) : ?>
-                                        <option value="<?= $doctor['id']?>"><?= $doctor['doctor_name']?></option>
+                                        <option value="<?= $doctor['id'] ?>"><?= $doctor['doctor_name'] ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
@@ -134,7 +134,8 @@ $pagename = "dynamic_reports";
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php
 
-function unsetProblematicFields(&$data) {
+function unsetProblematicFields(&$data)
+{
     foreach ($data as &$item) {
         // Unset fields that might be problematic
         unset($item['products']);
@@ -153,17 +154,17 @@ $json_doctors = json_encode($locations);
     var app_users = `<?= $json_app_users ?>`
     var doctors = `<?= $json_doctors ?>`
 
-    $("#doctor-user").change(function (){
-        if($(this).val() == "doctor"){
+    $("#doctor-user").change(function() {
+        if ($(this).val() == "doctor") {
             $("#doctor-select").removeClass("d-none");
             $("#user-select").addClass("d-none");
-        }else{
+        } else {
             $("#doctor-select").addClass("d-none");
             $("#user-select").removeClass("d-none");
         }
     })
 
-    $("#city_id").change(function () {
+    $("#city_id").change(function() {
         var city_id = $(this).val();
         var app_users_parsed = JSON.parse(app_users);
         var doctors_parsed = JSON.parse(doctors);
@@ -190,10 +191,10 @@ $json_doctors = json_encode($locations);
 
     })
 
-    $("#calls-plan").change(function () {
-        if($(this).val() == "weekly_plan"){
+    $("#calls-plan").change(function() {
+        if ($(this).val() == "weekly_plan") {
             $("#which").text("Plans");
-        }else{
+        } else {
             $("#which").text("Calls");
         }
     })
@@ -215,7 +216,7 @@ $json_doctors = json_encode($locations);
         var timeSplit = timeString.split(':');
         var hours = parseInt(timeSplit[0], 10);
         var minutes = timeSplit[1];
-        
+
         // Determine AM or PM
         var period = hours >= 12 ? 'PM' : 'AM';
 
@@ -237,7 +238,7 @@ $json_doctors = json_encode($locations);
         var timeSplit = time24.split(':');
         var hours = parseInt(timeSplit[0], 10);
         var minutes = timeSplit[1];
-        
+
         // Determine AM or PM
         var period = hours >= 12 ? 'PM' : 'AM';
 
@@ -252,131 +253,90 @@ $json_doctors = json_encode($locations);
         return hours + ':' + minutes + ' ' + period;
     }
 
+    let datatable;
+
     $("#regstr").on("submit", function(e) {
-			e.preventDefault()
+        e.preventDefault();
 
-			const formdata = new FormData(this)
+        const formdata = new FormData(this);
 
-			$.ajax({
-				url: "<?php echo base_url() . "dynamic-reports-get"; ?>",
-				type: "post",
-				data: formdata,
-				processData: false,
-				contentType: false,
-				cache: false,
-				beforeSend: function() {
-					$(":submit").prop("disabled", true);
-					$(":submit").addClass("d-none");
-					$("#spinner").removeClass("d-none");
-					$("#error").addClass("d-none");
-				},
-				success: function(res) {
-                    let arr = JSON.parse(res);
+        $.ajax({
+            url: "<?php echo base_url() . 'dynamic-reports-get'; ?>",
+            type: "post",
+            data: formdata,
+            processData: false,
+            contentType: false,
+            cache: false,
+            beforeSend: function() {
+                if (datatable) {
+                    datatable.destroy(); // Destroy previous DataTable instance if it exists
+                }
+                $(":submit").prop("disabled", true).addClass("d-none");
+                $("#spinner").removeClass("d-none");
+                $("#error").addClass("d-none");
+            },
+            success: function(res) {
+                let arr = JSON.parse(res);
+                let header = "";
+                let html = "";
 
-                    let header = ""
-                    let html = "";
+                if ($("#calls-plan").val() === "location_calls") {
+                    if ($("#doctor-user").val() === "user") {
+                        header = `<th>User</th><th>Date</th><th>Time</th><th>City</th><th>Evidance</th><th>Doctor</th>`;
+                    } else {
+                        header = `<th>Doctor</th><th>Date</th><th>Time</th><th>City</th><th>Evidance</th><th>User</th>`;
+                    }
 
-                    if($("#calls-plan").val() == "location_calls" && $("#doctor-user").val() == "user"){
-                        header = `<th>User</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>City</th>
-                                <th>Evidance</th>
-                                <th>Doctor</th>`;
-
-                        $.each(arr, function(key, val) {
-                            html += `<tr>
-                                    <td>${val.user_name}</td>
-                                    <td>${formatDate(val.created_at)}</td>
-                                    <td>${formatTime(val.created_at.split(' ')[1])}</td>
-                                    <td>${val.city_name}</td>
-                                    <td><img src="${val.evidance_picture}" width="80px"></img></td>
-                                    <td>${val.doctor_name}</td>
-                            </tr>`;
-                        })
-                    }else if(($("#calls-plan").val() == "location_calls" && $("#doctor-user").val() == "doctor") || ($("#calls-plan").val() == "location_calls" && $("#doctor-user").val() == null)){
-                        console.log("chala")
-                        header = `<th>Doctor</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>City</th>
-                                <th>Evidance</th>
-                                <th>User</th>`;
-
-                        $.each(arr, function(key, val) {
-                            html += `<tr>
-                                <td>${val.doctor_name}</td>
+                    $.each(arr, function(key, val) {
+                        html += `<tr>
+                                <td>${val.user_name || val.doctor_name}</td>
                                 <td>${formatDate(val.created_at)}</td>
                                 <td>${formatTime(val.created_at.split(' ')[1])}</td>
                                 <td>${val.city_name}</td>
                                 <td><img src="${val.evidance_picture}" width="80px"></img></td>
-                                <td>${val.user_name}</td>
+                                <td>${val.doctor_name || val.user_name}</td>
                             </tr>`;
-                        })
-                    }else if($("#calls-plan").val() == "weekly_plan" && $("#doctor-user").val() == "user"){
-                        header = `<th>User</th>
-                                <th>Planned Day</th>
-                                <th>Planned Time</th>
-                                <th>City</th>
-                                <th>Doctor</th>`;
-
-                        $.each(arr, function (key, val) {
-                            html += `<tr>
-                                    <td>${val.user_name}</td>
-                                    <td>${val.planned_day}</td>
-                                    <td>${convertTimeTo12HourFormat(val.planned_time)}</td>
-                                    <td>${val.city_name}</td>
-                                    <td>${val.doctor_name}</td>
-                            </tr>`;
-                        })
-                    }else if (($("#calls-plan").val() == "weekly_plan" && $("#doctor-user").val() == "doctor") || ($("#calls-plan").val() == "weekly_plan" && $("#doctor-user").val() == null)){
-                        header = `<th>Doctor</th>
-                                <th>Planned Day</th>
-                                <th>Planned Time</th>
-                                <th>City</th>
-                                <th>User</th>`;
-
-                        $.each(arr, function (key, val) {
-                            html += `<tr>
-                                    <td>${val.doctor_name}</td>
-                                    <td>${val.planned_day}</td>
-                                    <td>${convertTimeTo12HourFormat(val.planned_time)}</td>
-                                    <td>${val.city_name}</td>
-                                    <td>${val.user_name}</td>
-                            </tr>`;
-                        })
+                    });
+                } else if ($("#calls-plan").val() === "weekly_plan") {
+                    if ($("#doctor-user").val() === "user") {
+                        header = `<th>User</th><th>Planned Day</th><th>Planned Time</th><th>City</th><th>Doctor</th>`;
+                    } else {
+                        header = `<th>Doctor</th><th>Planned Day</th><th>Planned Time</th><th>City</th><th>User</th>`;
                     }
 
-                    $("#thead").html(header);
-                    $("#tbody").html(html);
+                    $.each(arr, function(key, val) {
+                        html += `<tr>
+                                <td>${val.user_name || val.doctor_name}</td>
+                                <td>${val.planned_day}</td>
+                                <td>${convertTimeTo12HourFormat(val.planned_time)}</td>
+                                <td>${val.city_name}</td>
+                                <td>${val.doctor_name || val.user_name}</td>
+                            </tr>`;
+                    });
+                }
 
-                    // foreach on arr
-                    
+                $("#thead").html(header);
+                $("#tbody").html(html);
 
-                    // $("#dtable").DataTable({
-                    //     "dom": 'Bfrtip',
-                    //     "buttons": ['copy', 'csv', 'excel', 'print'],
-                    //     "order": [1, 'asc'],
-                    //     "searching": true,
-                    //     "destroy": true
-                    // })
+                $('#dtable').removeClass('d-none');
+                $("#spinner").addClass("d-none");
+                $(":submit").removeClass("d-none").prop("disabled", false);
 
-                    $('#dtable').removeClass('d-none')
-                    $("#spinner").addClass("d-none");
-                    $(":submit").removeClass("d-none");
-                    $(":submit").prop("disabled", false);
+                datatable = $("#dtable").DataTable({
+                    dom: 'Bfrtip',
+                    buttons: ['copy', 'csv', 'excel', 'print'],
+                    order: [1, 'desc'],
+                    searching: true,
+                    destroy: true // Allow table to be reinitialized
+                });
 
-				},
-				error: function(error) {
-					toastr.error("Error while sending request to server!", "Error");
-					$(window).scrollTop(0);
-					$("#spinner").addClass("d-none");
-					$(":submit").prop("disabled", false);
-					$(":submit").removeClass("d-none");
-				}
-			})
-
-		})
-
+            },
+            error: function(error) {
+                toastr.error("Error while sending request to server!", "Error");
+                $(window).scrollTop(0);
+                $("#spinner").addClass("d-none");
+                $(":submit").prop("disabled", false).removeClass("d-none");
+            }
+        });
+    });
 </script>
-
