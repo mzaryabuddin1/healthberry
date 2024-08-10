@@ -138,6 +138,7 @@ class Report_model extends CI_Model
 
   public function get_calls_or_plans_via_city($params)
   {
+
     return $this->db->select($params['calls-plan'] . '.*, DAYNAME(' . $params['calls-plan'] . '.created_at) as dayname, cities.city_name, locations.doctor_name, app_users.username as user_name')
     ->from($params['calls-plan'])
     ->join('locations', 'locations.id = '.$params['calls-plan'].'.location_id', 'left')
@@ -145,7 +146,7 @@ class Report_model extends CI_Model
     ->join('cities', 'cities.id = locations.city', 'left')
     ->group_start()
         ->where('locations.city', $params['city_id']) // Condition for locations.city
-        ->or_where('app_users.city', $params['city_id']) // Condition for app_users.city
+        ->where('app_users.city', $params['city_id']) // Condition for app_users.city
     ->group_end()
     ->where($params['calls-plan'] . '.created_at BETWEEN \'' . $params['datefrom'] . '\' AND \'' . $params['dateto'] . '\'')
     ->get()->result_array();

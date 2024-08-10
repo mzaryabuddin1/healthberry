@@ -54,7 +54,7 @@ $pagename = "dynamic_reports";
                             <div class="col-sm-2">
                                 <label for="">Doctor/User</label>
                                 <select name="doctor-user" class="form-control" id="doctor-user">
-                                    <option value="" selected disabled>Select</option>
+                                    <option value="" selected >Select</option>
                                     <option value="doctor">Doctor</option>
                                     <option value="user">User</option>
                                 </select>

@@ -80,7 +80,7 @@ class Report extends CI_Controller
 		$this->form_validation->set_rules('dateto', 'Date To', 'required|date');
     $this->form_validation->set_rules('calls-plan', 'Calls/Plan', 'required|in_list[location_calls,weekly_plan]');
 
-    if(isset($_POST['doctor-user'])){
+    if(!empty($_POST['doctor-user'])){
       if($this->input->post('doctor-user') == 'doctor'){
         $this->form_validation->set_rules('location_id', 'Doctor', 'numeric');
       }else {
@@ -105,28 +105,28 @@ class Report extends CI_Controller
     $information = $this->input->post();
 
     $result = [];
-    if(isset($information['city_id']) && isset($information['doctor-user']) && $information['doctor-user'] == "doctor" && isset($information['location_id'])){
+    if(!empty($information['city_id']) && !empty($information['doctor-user']) && $information['doctor-user'] == "doctor" && !empty($information['location_id'])){
       $result = $this->Report_model->get_doctor_calls_or_plans_via_city_and_id($information);
     }
-    else if(isset($information['city_id']) && isset($information['doctor-user']) && $information['doctor-user'] == "user" && isset($information['app_user_id'])){
+    else if(!empty($information['city_id']) && !empty($information['doctor-user']) && $information['doctor-user'] == "user" && !empty($information['app_user_id'])){
       $result = $this->Report_model->get_user_calls_or_plans_via_city_and_id($information);
     }
-    else if(!isset($information['city_id']) && isset($information['doctor-user']) && $information['doctor-user'] == "doctor" && isset($information['location_id'])){
+    else if(empty($information['city_id']) && !empty($information['doctor-user']) && $information['doctor-user'] == "doctor" && !empty($information['location_id'])){
       $result = $this->Report_model->get_doctor_calls_or_plans_via_id($information);
     }
-    else if(!isset($information['city_id']) && isset($information['doctor-user']) && $information['doctor-user'] == "user" && isset($information['app_user_id'])){
+    else if(empty($information['city_id']) && !empty($information['doctor-user']) && $information['doctor-user'] == "user" && !empty($information['app_user_id'])){
       $result = $this->Report_model->get_user_calls_or_plans_via_id($information);
     }
-    else if(isset($information['city_id']) && isset($information['doctor-user']) && $information['doctor-user'] == "doctor"){
+    else if(!empty($information['city_id']) && !empty($information['doctor-user']) && $information['doctor-user'] == "doctor"){
       $result = $this->Report_model->get_doctor_calls_or_plans_via_city($information);
     }
-    else if(isset($information['city_id']) && isset($information['doctor-user']) && $information['doctor-user'] == "user"){
+    else if(!empty($information['city_id']) && !empty($information['doctor-user']) && $information['doctor-user'] == "user"){
       $result = $this->Report_model->get_user_calls_or_plans_via_city($information);
     }
-    else if(isset($information['city_id']) && !isset($information['doctor-user'])){
+    else if(!empty($information['city_id']) && empty($information['doctor-user'])){
       $result = $this->Report_model->get_calls_or_plans_via_city($information);
     }
-    else if(!isset($information['city_id']) &&!isset($information['doctor-user'])){
+    else if(empty($information['city_id']) && empty($information['doctor-user'])){
       $result = $this->Report_model->get_calls_or_plans($information);
     }
 
